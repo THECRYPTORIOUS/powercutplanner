@@ -249,6 +249,70 @@ details:first-of-type { border-top: 0; padding-top: 0; }
 summary { cursor: pointer; font-weight: 600; }
 details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
 
+/* Government advice timeline */
+.why { padding-bottom: 36px; }
+.why h2 { font-size: clamp(1.5rem, 4vw, 2rem); }
+.timeline { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.timeline li { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--lamp); border-radius: var(--radius); padding: 14px; font-size: .93rem; }
+.timeline time { display: block; font-family: var(--mono); font-size: .78rem; color: var(--lamp-ink); margin-bottom: 4px; }
+.timeline b { display: block; margin-bottom: 2px; }
+.balance { color: var(--muted); max-width: 70ch; font-size: .93rem; }
+.balance a { color: var(--ink); }
+
+
+/* Hero: dark "72 hours" band */
+header.top {
+  background-color: var(--meter-bg);
+  background-image:
+    radial-gradient(ellipse 55% 70% at 88% 15%, rgba(245,182,65,.20), transparent 62%),
+    radial-gradient(ellipse 40% 50% at 5% 100%, rgba(255,90,60,.10), transparent 60%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+  color: #E9EEF1; padding-top: 30px; padding-bottom: 34px; border-bottom: 3px solid var(--meter-ink);
+}
+.hero { display: grid; gap: 26px; grid-template-columns: 1fr; }
+@media (min-width: 920px) { .hero { grid-template-columns: 1.15fr 1fr; align-items: center; } }
+.alert-tag {
+  display: inline-flex; align-items: center; gap: 9px; margin: 0 0 16px;
+  font-family: var(--display); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .82rem;
+  color: var(--meter-ink); border: 1px solid rgba(245,182,65,.45); border-radius: 999px; padding: 5px 13px;
+  background: rgba(245,182,65,.08);
+}
+.pulse { width: 9px; height: 9px; border-radius: 50%; background: #FF5A3C; animation: pulse 1.8s ease-out infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255,90,60,.65); } 70% { box-shadow: 0 0 0 11px rgba(255,90,60,0); } 100% { box-shadow: 0 0 0 0 rgba(255,90,60,0); } }
+.kicker { font-family: var(--display); font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: #C9D5DD; margin: 0; font-size: clamp(1rem, 3vw, 1.25rem); }
+.big72 {
+  font-family: var(--display); font-weight: 700; color: var(--meter-ink); line-height: .82;
+  font-size: clamp(6.5rem, 30vw, 11rem); letter-spacing: -.01em; margin: 2px 0 4px;
+  text-shadow: 0 0 42px rgba(245,182,65,.38); display: flex; align-items: flex-end; gap: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.big72 span { font-size: .3em; line-height: 1; padding-bottom: .18em; text-transform: uppercase; color: #FFFFFF; letter-spacing: .05em; text-shadow: none; }
+header.top h1 { color: #FFFFFF; font-size: clamp(1.9rem, 5.5vw, 2.8rem); margin: 22px 0 10px; max-width: 18ch; }
+header.top .lede { color: #C9D5DD; }
+header.top .lede a { color: #FFFFFF; text-decoration-color: var(--meter-ink); }
+.hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.btn-amber, .btn-ghost { display: inline-flex; align-items: center; text-decoration: none; font-weight: 600; padding: 12px 18px; border-radius: 8px; font-size: 1rem; }
+.btn-amber { background: var(--meter-ink); color: #1A1200; box-shadow: 0 6px 22px rgba(245,182,65,.28); }
+.btn-amber:hover { background: #FFC85C; }
+.btn-ghost { color: #FFFFFF; border: 1px solid rgba(255,255,255,.32); }
+.btn-ghost:hover { border-color: var(--meter-ink); color: var(--meter-ink); }
+.runbars { margin: 0; background: rgba(255,255,255,.035); border: 1px solid #22323E; border-radius: var(--radius); padding: 18px; }
+.runbars figcaption { font-family: var(--display); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; color: var(--meter-dim); margin-bottom: 14px; }
+.rb-row + .rb-row { margin-top: 14px; }
+.rb-label { display: flex; justify-content: space-between; gap: 10px; font-size: .9rem; margin-bottom: 6px; }
+.rb-label b { font-family: var(--mono); font-weight: 500; color: var(--meter-ink); }
+.rb-label b.ok { color: #5CC98B; }
+.rb-track { position: relative; height: 16px; background: #182631; border-radius: 4px; overflow: hidden; }
+.rb-track i { position: absolute; top: 0; bottom: 0; width: 1px; background: rgba(255,255,255,.18); }
+.rb-fill { position: absolute; inset: 0 auto 0 0; border-radius: 4px; animation: grow 1.5s cubic-bezier(.2,.7,.2,1) both; }
+.rb-fill.short { background: linear-gradient(90deg, #F5B641, #FF7A3C); }
+.rb-fill.full { background: linear-gradient(90deg, #3FAE6E, #5CC98B); }
+.rb-fill.d2 { animation-delay: .25s; }
+.rb-fill.d3 { animation-delay: .5s; }
+@keyframes grow { from { width: 0; } }
+.rb-axis { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 8px; font-family: var(--mono); font-size: .72rem; color: var(--meter-dim); text-align: center; }
+@media (prefers-reduced-motion: reduce) { .pulse, .rb-fill { animation: none !important; } }
+
 footer.wrap { border-top: 1px solid var(--line); padding-top: 18px; padding-bottom: 90px; color: var(--muted); font-size: .82rem; }
 footer p { max-width: 75ch; margin: 0 0 8px; }
 
@@ -269,16 +333,44 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   * { transition: none !important; }
 }
 </style>
-<style>header.top { padding-top: 22px; } footer.wrap nav { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:12px; }</style>
+<style>footer.wrap nav { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:12px; }</style>
 </head>
 <body>
 <header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
-<header class="top wrap">
-  <h1>How big a power station do you need?</h1>
-  <p class="lede">Tick what you'd want running in a power cut and choose how long. You'll see how much battery that takes, and which power stations can actually do it. UK government advice is to be ready to manage for <a href="https://prepare.campaign.gov.uk/be-informed-about-hazards/power-cuts/">up to three days</a> if essential services are disrupted.</p>
+<header class="top">
+  <div class="wrap hero">
+    <div class="hero-copy">
+      <p class="alert-tag"><span class="pulse" aria-hidden="true"></span>Government advice · 22 October 2026</p>
+      <p class="kicker">Be ready for</p>
+      <div class="big72" aria-label="72 hours">72<span>hours</span></div>
+      <p class="kicker">without power, water, phones or internet</p>
+      <h1>How big a power station do you need?</h1>
+      <p class="lede">The government's new <a href="https://www.gov.uk/government/news/households-encouraged-to-take-small-simple-steps-to-stay-prepared-in-an-emergency">Be Ready campaign</a> asks every UK household to plan for three days without power, naming cyber attacks alongside severe weather. A typical 1 kWh power station won't get a fridge-freezer, Wi-Fi and lights through even one.</p>
+      <div class="hero-ctas">
+        <a class="btn-amber" href="#calc">Work out what you need</a>
+        <a class="btn-ghost" href="guides/why-the-government-says-prepare-for-power-cuts/">Why now →</a>
+      </div>
+    </div>
+    <figure class="runbars" aria-label="How long power stations last on a fridge-freezer, Wi-Fi, three lamps and two phones: 1 kWh about 18 hours, 2 kWh about 37 hours, 4 kWh about 3 days.">
+      <figcaption>Fridge-freezer, Wi-Fi, 3 lamps and 2 phones</figcaption>
+      <div class="rb-row">
+        <div class="rb-label"><span>1 kWh power station</span><b>about 18 hrs</b></div>
+        <div class="rb-track"><div class="rb-fill short" style="width:25.5%"></div><i style="left:33.33%"></i><i style="left:66.66%"></i></div>
+      </div>
+      <div class="rb-row">
+        <div class="rb-label"><span>2 kWh power station</span><b>about 37 hrs</b></div>
+        <div class="rb-track"><div class="rb-fill short d2" style="width:51%"></div><i style="left:33.33%"></i><i style="left:66.66%"></i></div>
+      </div>
+      <div class="rb-row">
+        <div class="rb-label"><span>4 kWh power station</span><b class="ok">3 days ✓</b></div>
+        <div class="rb-track"><div class="rb-fill full d3" style="width:100%"></div><i style="left:33.33%"></i><i style="left:66.66%"></i></div>
+      </div>
+      <div class="rb-axis"><span>Day 1</span><span>Day 2</span><span>Day 3</span></div>
+    </figure>
+  </div>
 </header>
 
-<main class="wrap layout">
+<main class="wrap layout" id="calc">
   <section class="readout" aria-live="polite">
     <div class="side-sticky">
       <div class="meter" id="meter">
@@ -346,6 +438,18 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
     </div>
   </section>
 </main>
+
+<section class="why wrap" aria-labelledby="why-h">
+  <h2 id="why-h">Why the government is asking us to prepare</h2>
+  <ol class="timeline">
+    <li><time datetime="2026-06-17">17 June 2026</time><b>Hostile states behind most attacks.</b> The head of the National Cyber Security Centre says around three-quarters of cyber attacks on UK critical infrastructure are linked to hostile states.</li>
+    <li><time datetime="2026-10-22">22 October 2026</time><b>Be Ready launched.</b> The Cabinet Office asks every household to be ready for three days without power, water, phones or internet. <a href="https://www.gov.uk/government/news/households-encouraged-to-take-small-simple-steps-to-stay-prepared-in-an-emergency">GOV.UK</a></li>
+    <li><time datetime="2026-11-03">3 November 2026</time><b>AI attack warning.</b> The NCSC judges an AI-powered ransomware attack on Britain's critical infrastructure "highly likely" by 2028. <a href="https://www.ncsc.gov.uk/news/cyber-chief-uk-facing-ai-powered-attacks-on-critical-infrastructure-in-two-years">NCSC</a></li>
+    <li><time datetime="2026-11-07">7 November 2026</time><b>BBC blackout plan.</b> The BBC reveals its "Black Sky" plan to keep broadcasting for at least 72 hours through a nationwide blackout.</li>
+  </ol>
+  <p class="balance">There's no specific threat to the grid, and the grid operator expects electricity supplies to <a href="https://www.neso.energy/news/britains-electricity-supplies-expected-remain-secure-winter">stay secure this winter</a>. Storms still cause most long power cuts. The advice is to be ready anyway, because when the power goes, help goes first to the people who need it most.</p>
+  <p><a class="cta" href="guides/why-the-government-says-prepare-for-power-cuts/">Read what the government says to keep at home →</a></p>
+</section>
 
 <footer class="wrap">
   <nav aria-label="Footer"><a href="about/">About</a><a href="affiliate-disclosure/">Affiliate disclosure</a><a href="privacy/">Privacy</a></nav>
