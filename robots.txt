@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://powercutplanner.co.uk/sitemap.xml

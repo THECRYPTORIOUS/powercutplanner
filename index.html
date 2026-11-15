@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How Big a Power Station Do I Need? Power Cut Calculator | Power Cut Planner</title>
+<meta name="description" content="Tick what you'd keep running in a power cut, choose how long, and see how much battery you need and which power stations can actually do it.">
+<link rel="canonical" href="https://powercutplanner.co.uk/">
+<meta property="og:title" content="How big a power station do you need for a power cut?">
+<meta property="og:description" content="Tick what you'd keep running, choose how long, and see which power stations can actually do it.">
+<meta property="og:url" content="https://powercutplanner.co.uk/">
+<meta property="og:site_name" content="Power Cut Planner">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/site.css">
+<style>
+/* Layout: mobile = readout, picker, matches stacked; desktop = picker left, sticky readout + matches right. */
+:root {
+  --bg: #EDF0F2;
+  --surface: #FFFFFF;
+  --ink: #0F1D27;
+  --muted: #566672;
+  --line: #D2D9DF;
+  --track: #E2E7EB;
+  --lamp: #E39B12;
+  --lamp-ink: #7A4B00;
+  --lamp-soft: #FCEFD3;
+  --good: #1F7646;
+  --good-soft: #DDF1E5;
+  --warn: #9A5B00;
+  --warn-soft: #FBEBD0;
+  --bad: #AE3B27;
+  --bad-soft: #F8E0DA;
+  --meter-bg: #0D1820;
+  --meter-ink: #F5B641;
+  --meter-dim: #93A6B4;
+  --meter-line: #1F2F3A;
+  --display: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0A1116;
+    --surface: #121C24;
+    --ink: #E5ECF1;
+    --muted: #91A2AF;
+    --line: #22313C;
+    --track: #1B2731;
+    --lamp: #F0AE36;
+    --lamp-ink: #F5C46A;
+    --lamp-soft: #2B2312;
+    --good: #5CC98B;
+    --good-soft: #13291D;
+    --warn: #EBB25A;
+    --warn-soft: #2C2213;
+    --bad: #EE8670;
+    --bad-soft: #2E1712;
+    --meter-bg: #060C10;
+    --meter-line: #1A2832;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0A1116;
+  --surface: #121C24;
+  --ink: #E5ECF1;
+  --muted: #91A2AF;
+  --line: #22313C;
+  --track: #1B2731;
+  --lamp: #F0AE36;
+  --lamp-ink: #F5C46A;
+  --lamp-soft: #2B2312;
+  --good: #5CC98B;
+  --good-soft: #13291D;
+  --warn: #EBB25A;
+  --warn-soft: #2C2213;
+  --bad: #EE8670;
+  --bad-soft: #2E1712;
+  --meter-bg: #060C10;
+  --meter-line: #1A2832;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+}
+a { color: inherit; text-decoration-color: var(--lamp); text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--lamp); outline-offset: 2px; border-radius: 4px; }
+
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 18px; }
+
+/* Header */
+header.top { padding-top: 28px; padding-bottom: 8px; }
+.brand {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--display); font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  font-size: .95rem; color: var(--muted);
+}
+.brand svg { width: 18px; height: 18px; color: var(--lamp); }
+h1 {
+  font-family: var(--display); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(2.2rem, 7vw, 3.6rem); line-height: .95; letter-spacing: .005em;
+  margin: 14px 0 12px; max-width: 16ch; text-wrap: balance;
+}
+.lede { max-width: 62ch; margin: 0; color: var(--muted); font-size: 1.05rem; }
+.lede a { color: var(--ink); }
+
+/* Grid */
+.layout {
+  display: grid; gap: 22px; padding-top: 22px; padding-bottom: 40px;
+  grid-template-columns: 1fr;
+  grid-template-areas: "readout" "picker" "matches" "notes";
+}
+.readout { grid-area: readout; }
+.picker { grid-area: picker; }
+.matches { grid-area: matches; }
+.notes { grid-area: notes; }
+@media (min-width: 920px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-areas: "picker readout" "picker matches" "notes matches";
+    align-items: start;
+  }
+  .side-sticky { position: sticky; top: 16px; }
+}
+
+h2 {
+  font-family: var(--display); font-weight: 700; text-transform: uppercase; letter-spacing: .03em;
+  font-size: 1.45rem; line-height: 1.1; margin: 0 0 4px;
+}
+.step { color: var(--lamp-ink); margin-right: 6px; }
+.sub { margin: 0 0 14px; color: var(--muted); font-size: .95rem; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px; }
+
+/* Duration */
+.durations { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 0 0 16px; padding: 0; border: 0; }
+.durations legend { font-weight: 600; font-size: .9rem; margin-bottom: 8px; padding: 0; }
+.durations input { position: absolute; opacity: 0; pointer-events: none; }
+.durations label {
+  display: block; text-align: center; padding: 10px 4px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--bg);
+  font-family: var(--display); font-weight: 700; font-size: 1.1rem; letter-spacing: .02em;
+}
+.durations input:checked + label { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.durations input:focus-visible + label { outline: 3px solid var(--lamp); outline-offset: 2px; }
+
+/* Appliances */
+.apps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.app {
+  display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center;
+  padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
+  transition: border-color .15s, background-color .15s;
+}
+.app.on { border-color: var(--lamp); background: var(--lamp-soft); }
+.app input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--lamp); margin: 0; cursor: pointer; }
+.app label { cursor: pointer; display: block; }
+.app .name { font-weight: 600; display: block; }
+.app .detail { color: var(--muted); font-size: .85rem; display: block; }
+.app .kwh { font-family: var(--mono); font-size: .78rem; color: var(--muted); white-space: nowrap; }
+.qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
+.qty button {
+  width: 32px; height: 32px; border: 0; background: transparent; color: var(--ink);
+  font-size: 1.1rem; cursor: pointer; border-radius: 999px; font-family: var(--body);
+}
+.qty button:hover { background: var(--track); }
+.qty output { min-width: 22px; text-align: center; font-family: var(--mono); font-size: .9rem; }
+.app .right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.flag { font-size: .72rem; font-weight: 600; color: var(--bad); text-transform: uppercase; letter-spacing: .04em; }
+
+/* Readout (meter) */
+.meter {
+  background: var(--meter-bg); color: var(--meter-dim); border-radius: var(--radius);
+  padding: 18px 18px 16px; position: relative; overflow: hidden;
+  border: 1px solid var(--meter-line);
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.025) 0 1px, transparent 1px 4px);
+}
+.meter .label { font-family: var(--display); font-weight: 600; letter-spacing: .12em; text-transform: uppercase; font-size: .85rem; }
+.meter .big {
+  font-family: var(--display); font-weight: 700; color: var(--meter-ink);
+  font-size: clamp(3.4rem, 13vw, 5.2rem); line-height: .9; margin: 6px 0 4px;
+  font-variant-numeric: tabular-nums; text-shadow: 0 0 22px rgba(245,182,65,.28);
+}
+.meter .big small { font-size: .38em; margin-left: 6px; color: var(--meter-dim); text-shadow: none; letter-spacing: .04em; }
+.meter .explain { color: #C9D5DD; font-size: .92rem; margin: 0 0 12px; max-width: 52ch; }
+.meter dl { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin: 0; border-top: 1px solid var(--meter-line); padding-top: 12px; }
+.meter dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
+.meter dd { margin: 2px 0 0; font-family: var(--mono); color: #E9EEF1; font-size: .95rem; font-variant-numeric: tabular-nums; }
+.meter .fit { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--meter-line); color: #E9EEF1; font-size: .95rem; }
+.meter .fit b { color: var(--meter-ink); font-weight: 600; }
+@media (max-width: 420px) { .meter dl { grid-template-columns: 1fr 1fr; } }
+
+/* Matches */
+.matches { margin-top: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: .8rem; color: var(--muted); margin: 0 0 10px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 8px; border-radius: 2px; display: inline-block; }
+.pps { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.pp { padding: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.pp.best { border-color: var(--good); box-shadow: 0 0 0 1px var(--good) inset; }
+.pp .row1 { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+.pp .title { font-weight: 600; line-height: 1.25; }
+.pp .brandname { display: block; font-family: var(--display); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: .78rem; color: var(--muted); }
+.pp .spec { font-family: var(--mono); font-size: .8rem; color: var(--muted); margin: 6px 0 10px; font-variant-numeric: tabular-nums; }
+.chip { flex: none; font-size: .75rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.chip.good { background: var(--good-soft); color: var(--good); }
+.chip.warn { background: var(--warn-soft); color: var(--warn); }
+.chip.bad { background: var(--bad-soft); color: var(--bad); }
+.chip.best { background: var(--good); color: var(--surface); }
+.bar { position: relative; height: 12px; background: var(--track); border-radius: 3px; }
+.bar .fill { position: absolute; inset: 0 auto 0 0; border-radius: 3px; background: var(--lamp); transition: width .35s ease; }
+.bar .fill.good { background: var(--good); }
+.bar .fill.bad { background: repeating-linear-gradient(135deg, var(--bad) 0 5px, transparent 5px 9px); }
+.bar .tick { position: absolute; top: -3px; bottom: -3px; width: 1px; background: var(--line); }
+.bar .target { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--ink); }
+.bar .more { position: absolute; right: -2px; top: 50%; transform: translateY(-50%); font-size: .7rem; color: var(--surface); padding-right: 4px; font-weight: 600; }
+.axis { position: relative; height: 16px; font-family: var(--mono); font-size: .68rem; color: var(--muted); margin-top: 3px; }
+.axis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.pp .row3 { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+.pp .runtime { font-size: .92rem; }
+.pp .runtime b { font-weight: 600; }
+.pp .why { font-size: .85rem; color: var(--bad); margin-top: 6px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 6px; text-decoration: none; font-weight: 600; font-size: .88rem;
+  padding: 7px 12px; border-radius: 8px; background: var(--ink); color: var(--surface); white-space: nowrap;
+}
+.btn:hover { background: var(--lamp); color: #1A1200; }
+.small { font-size: .8rem; color: var(--muted); }
+
+/* Notes */
+.notes .panel + .panel { margin-top: 14px; }
+.notelist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.notelist li { padding-left: 14px; border-left: 3px solid var(--lamp); font-size: .93rem; }
+.notelist li.alert { border-left-color: var(--bad); }
+.notelist b { font-weight: 600; }
+details { border-top: 1px solid var(--line); padding: 10px 0; }
+details:first-of-type { border-top: 0; padding-top: 0; }
+summary { cursor: pointer; font-weight: 600; }
+details p { margin: 8px 0 0; color: var(--muted); font-size: .93rem; }
+
+footer.wrap { border-top: 1px solid var(--line); padding-top: 18px; padding-bottom: 90px; color: var(--muted); font-size: .82rem; }
+footer p { max-width: 75ch; margin: 0 0 8px; }
+
+/* Mobile summary bar */
+.dock {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 5;
+  background: var(--meter-bg); color: #E9EEF1; border-top: 1px solid var(--meter-line);
+  padding: 10px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  transform: translateY(0); transition: transform .2s ease;
+}
+.dock .d-num { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--meter-ink); line-height: 1; }
+.dock .d-txt { font-size: .82rem; color: var(--meter-dim); line-height: 1.25; }
+.dock a { color: #1A1200; background: var(--meter-ink); text-decoration: none; font-weight: 600; font-size: .85rem; padding: 8px 12px; border-radius: 8px; white-space: nowrap; }
+.dock.hide { transform: translateY(110%); }
+@media (min-width: 920px) { .dock { display: none; } footer.wrap { padding-bottom: 28px; } }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+<style>header.top { padding-top: 22px; } footer.wrap nav { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:12px; }</style>
+</head>
+<body>
+<header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
+<header class="top wrap">
+  <h1>How big a power station do you need?</h1>
+  <p class="lede">Tick what you'd want running in a power cut and choose how long. You'll see how much battery that takes, and which power stations can actually do it. UK government advice is to be ready to manage for <a href="https://prepare.campaign.gov.uk/be-informed-about-hazards/power-cuts/">up to three days</a> if essential services are disrupted.</p>
+</header>
+
+<main class="wrap layout">
+  <section class="readout" aria-live="polite">
+    <div class="side-sticky">
+      <div class="meter" id="meter">
+        <div class="label" id="m-label">Battery you need for 3 days</div>
+        <div class="big" id="m-big">4.0<small>kWh</small></div>
+        <p class="explain" id="m-explain">Your selection uses about 1.1 kWh a day. We add 15% because power stations lose some energy converting to mains power.</p>
+        <dl>
+          <div><dt>Per day</dt><dd id="m-day">1.14 kWh</dd></div>
+          <div><dt>Output needed</dt><dd id="m-watts">226 W</dd></div>
+          <div><dt>Covers it</dt><dd id="m-count">2 of 9</dd></div>
+        </dl>
+        <div class="fit" id="m-fit">Best fit: <b>Jackery Explorer 2000 Plus v2 + Battery Pack 2000</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="picker">
+    <div class="panel">
+      <h2><span class="step">1</span>What do you need running?</h2>
+      <p class="sub">Typical UK figures. Check the label on your own appliance if you want to be exact.</p>
+      <fieldset class="durations" id="durations">
+        <legend>How long should it last?</legend>
+      </fieldset>
+      <ul class="apps" id="apps"></ul>
+    </div>
+  </section>
+
+  <section class="matches" id="matches">
+    <div class="panel">
+      <h2><span class="step">2</span>Which power stations can do it?</h2>
+      <p class="sub" id="matches-sub">Bars show how long each one would run everything you've ticked. The black line is your target.</p>
+      <div class="legend" aria-hidden="true">
+        <span><i style="background:var(--good)"></i>Lasts the full time</span>
+        <span><i style="background:var(--lamp)"></i>Runs out early</span>
+        <span><i style="background:repeating-linear-gradient(135deg,var(--bad) 0 4px,transparent 4px 7px)"></i>Not powerful enough</span>
+      </div>
+      <ul class="pps" id="pps"></ul>
+      <p class="small" style="margin:12px 0 0">Prices are full list prices (RRP), checked 15 November 2026. Most of these sell for less, especially around Black Friday, so check today's price before you buy.</p>
+    </div>
+  </section>
+
+  <section class="notes">
+    <div class="panel">
+      <h2>Before a power cut</h2>
+      <ul class="notelist" id="notes"></ul>
+    </div>
+    <div class="panel">
+      <h2>Common questions</h2>
+      <details>
+        <summary>Why do I need more than my appliances add up to?</summary>
+        <p>A power station stores energy as DC and converts it to 230 V mains, which wastes some of it. Some energy also goes on keeping the unit itself switched on. We allow 15% for this, so you're not caught short.</p>
+      </details>
+      <details>
+        <summary>Will a power station run my gas boiler?</summary>
+        <p>Often, yes. A gas boiler's controls and pump draw roughly 100 W. But most boilers are wired into a fused spur rather than a plug, so an electrician needs to fit a proper plug-in connection first. Never wire a power station into your home's circuits yourself.</p>
+      </details>
+      <details>
+        <summary>Can I recharge it with a solar panel during a long power cut?</summary>
+        <p>Yes, but go easy on the maths in winter. A UK solar panel produces only a small share of its rated watts on a grey December day, so treat solar as a top-up rather than a replacement for battery size.</p>
+      </details>
+      <details>
+        <summary>Is a petrol generator a better idea?</summary>
+        <p>It's cheaper per kWh, but it's noisy and needs fuel stored safely. Above all, a petrol generator must never be run indoors or in a garage because of carbon monoxide. A battery power station is silent and safe to use inside.</p>
+      </details>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <nav aria-label="Footer"><a href="about/">About</a><a href="contact/">Contact</a><a href="affiliate-disclosure/">Affiliate disclosure</a><a href="privacy/">Privacy</a></nav>
+
+  <p><b>Affiliate links:</b> some "See today's price" links may earn us a commission if you buy, at no extra cost to you. It never changes the results: every power station is ranked by the same maths.</p>
+  <p>Estimates use typical UK appliance figures and assume 85% of a power station's rated capacity is usable. Real results vary with your appliances, the temperature and the age of the battery. To report a power cut, call <b>105</b> free in England, Scotland and Wales.</p>
+  <p>© 2026 Power Cut Planner · Contact: hello@powercutplanner.co.uk</p>
+</footer>
+
+<div class="dock" id="dock" aria-hidden="true">
+  <div>
+    <div class="d-num" id="d-num">4.0 kWh</div>
+    <div class="d-txt" id="d-txt">needed for 3 days</div>
+  </div>
+  <a href="#matches" tabindex="-1">See matches</a>
+</div>
+
+<script>
+/* ===== Edit these: paste your affiliate links in place of the shop links once you're approved. ===== */
+const LINKS = {
+  "jackery-1000plus-v2": "https://uk.jackery.com/pages/portable-power-stations",
+  "ecoflow-delta3plus": "https://www.currys.co.uk/products/ecoflow-delta-3-plus-1024-wh-portable-power-station-10302850.html",
+  "anker-c1000-gen2": "https://uk.ankersolix.com/products/c1000-gen2",
+  "jackery-2000plus-v2": "https://uk.jackery.com/pages/portable-power-stations",
+  "anker-c2000-gen2": "https://www.ankersolix.com/uk/c2000-gen2-boa",
+  "jackery-3000-v2": "https://uk.jackery.com/pages/portable-power-stations",
+  "anker-f3800": "https://www.ankersolix.com/uk/collections/portable-powerstation",
+  "ecoflow-deltapro3": "https://www.currys.co.uk/products/ecoflow-delta-pro-3-4096-wh-portable-power-station-10276064.html",
+  "jackery-2000plus-v2-bp": "https://uk.jackery.com/pages/portable-power-stations"
+};
+
+const PRODUCTS = [
+  { id: "jackery-1000plus-v2", brand: "Jackery", name: "Explorer 1000 Plus v2", wh: 1024, w: 1800, rrp: 749 },
+  { id: "ecoflow-delta3plus", brand: "EcoFlow", name: "DELTA 3 Plus", wh: 1024, w: 1800, rrp: 899 },
+  { id: "anker-c1000-gen2", brand: "Anker SOLIX", name: "C1000 Gen 2", wh: 1024, w: 2000, rrp: 999 },
+  { id: "jackery-2000plus-v2", brand: "Jackery", name: "Explorer 2000 Plus v2", wh: 2048, w: 2400, rrp: 1249 },
+  { id: "anker-c2000-gen2", brand: "Anker SOLIX", name: "C2000 Gen 2", wh: 2048, w: 2400, rrp: 1500 },
+  { id: "jackery-3000-v2", brand: "Jackery", name: "Explorer 3000 v2", wh: 3072, w: 3600, rrp: 2299 },
+  { id: "jackery-2000plus-v2-bp", brand: "Jackery", name: "Explorer 2000 Plus v2 + Battery Pack 2000", wh: 4096, w: 2400, rrp: 2098, bundle: true },
+  { id: "ecoflow-deltapro3", brand: "EcoFlow", name: "DELTA Pro 3", wh: 4096, w: 4000, rrp: 2799 },
+  { id: "anker-f3800", brand: "Anker SOLIX", name: "F3800", wh: 3840, w: 6000, rrp: 3699 }
+];
+
+/* Typical UK figures. whDay = energy per day; w = watts drawn while running.
+   burst = high-power item you'd use one at a time (kettle, microwave). */
+const APPLIANCES = [
+  { id: "fridgefreezer", name: "Fridge-freezer", detail: "Cycles on and off all day", whDay: 700, w: 150, on: true },
+  { id: "router", name: "Wi-Fi router and fibre box", detail: "About 12 W, on all day", whDay: 288, w: 12, on: true },
+  { id: "lights", name: "LED lamps", detail: "8 W each, 5 hours an evening", whEach: 40, w: 8, qty: 3, on: true },
+  { id: "phones", name: "Phone charges", detail: "One full charge each a day", whEach: 15, w: 20, qty: 2, on: true },
+  { id: "boiler", name: "Gas boiler (controls and pump)", detail: "About 100 W, heating on 6 hours", whDay: 600, w: 100 },
+  { id: "fridge", name: "Separate fridge", detail: "No freezer compartment", whDay: 350, w: 100 },
+  { id: "freezer", name: "Separate freezer", detail: "Chest or upright", whDay: 500, w: 100 },
+  { id: "laptop", name: "Laptop", detail: "50 W, 4 hours", whDay: 200, w: 50 },
+  { id: "tv", name: "TV", detail: "70 W, 4 hours", whDay: 280, w: 70 },
+  { id: "blanket", name: "Electric blanket", detail: "60 W, 3 hours", whDay: 180, w: 60 },
+  { id: "cpap", name: "CPAP machine", detail: "40 W overnight, no heated humidifier", whDay: 320, w: 40 },
+  { id: "microwave", name: "Microwave", detail: "About 1,300 W, 15 minutes a day", whDay: 300, w: 1300, burst: true },
+  { id: "kettle", name: "Kettle", detail: "About 3,000 W, 4 boils a day", whDay: 400, w: 3000, burst: true }
+];
+
+const DURATIONS = [
+  { id: "d12", label: "12 hrs", hours: 12 },
+  { id: "d24", label: "1 day", hours: 24 },
+  { id: "d48", label: "2 days", hours: 48 },
+  { id: "d72", label: "3 days", hours: 72 }
+];
+
+const USABLE = 0.85;
+
+/* ---------- Pure maths ---------- */
+function calculate(selection, hours) {
+  let dailyWh = 0, steadyW = 0, burstW = 0;
+  for (const a of APPLIANCES) {
+    const s = selection[a.id];
+    if (!s || !s.on) continue;
+    const n = a.qty ? s.qty : 1;
+    if (n <= 0) continue;
+    dailyWh += a.whEach ? a.whEach * n : a.whDay;
+    if (a.burst) burstW = Math.max(burstW, a.w);
+    else steadyW += a.w * n;
+  }
+  const outputW = steadyW + burstW;
+  const neededWh = dailyWh * (hours / 24) / USABLE;
+  const products = PRODUCTS.map(p => {
+    const runtimeH = dailyWh > 0 ? (p.wh * USABLE) / (dailyWh / 24) : Infinity;
+    const powerOk = p.w >= outputW;
+    const lastsOk = runtimeH >= hours;
+    return { ...p, runtimeH, powerOk, lastsOk, ok: powerOk && lastsOk };
+  });
+  const fits = products.filter(p => p.ok).sort((a, b) => a.rrp - b.rrp);
+  return { dailyWh, outputW, burstW, neededWh, products, best: fits[0] || null, okCount: fits.length };
+}
+
+/* ---------- Formatting ---------- */
+const nf = new Intl.NumberFormat("en-GB");
+function kwh(wh, digits) { return (wh / 1000).toFixed(digits) + " kWh"; }
+function energyBig(wh) { return wh >= 1000 ? { n: (wh / 1000).toFixed(1), u: "kWh" } : { n: String(Math.round(wh / 10) * 10), u: "Wh" }; }
+function durationText(h) {
+  if (!isFinite(h) || h > 240) return "over 10 days";
+  const r = Math.round(h);
+  if (r < 24) return "about " + r + (r === 1 ? " hour" : " hours");
+  const d = Math.floor(r / 24), hh = r % 24;
+  return "about " + d + (d === 1 ? " day" : " days") + (hh ? " " + hh + (hh === 1 ? " hour" : " hours") : "");
+}
+function durationLabel(hours) { return DURATIONS.find(d => d.hours === hours).label.replace("hrs", "hours"); }
+
+/* ---------- State ---------- */
+function defaultState() {
+  const sel = {};
+  for (const a of APPLIANCES) sel[a.id] = { on: !!a.on, qty: a.qty || 1 };
+  return { sel, hours: 72 };
+}
+let state = defaultState();
+
+/* ---------- Render: inputs ---------- */
+function buildInputs() {
+  const fs = document.getElementById("durations");
+  for (const d of DURATIONS) {
+    const input = document.createElement("input");
+    input.type = "radio"; input.name = "duration"; input.id = d.id; input.value = d.hours;
+    input.checked = d.hours === state.hours;
+    input.addEventListener("change", () => { state.hours = d.hours; update(); });
+    const label = document.createElement("label");
+    label.htmlFor = d.id; label.textContent = d.label;
+    fs.append(input, label);
+  }
+  const ul = document.getElementById("apps");
+  for (const a of APPLIANCES) {
+    const li = document.createElement("li");
+    li.className = "app"; li.id = "row-" + a.id;
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.id = "cb-" + a.id; cb.checked = state.sel[a.id].on;
+    cb.addEventListener("change", () => { state.sel[a.id].on = cb.checked; update(); });
+    const lab = document.createElement("label");
+    lab.htmlFor = cb.id;
+    lab.innerHTML = '<span class="name"></span><span class="detail"></span>';
+    lab.querySelector(".name").textContent = a.name;
+    lab.querySelector(".detail").textContent = a.detail;
+    const right = document.createElement("div");
+    right.className = "right";
+    if (a.qty) {
+      const q = document.createElement("div");
+      q.className = "qty";
+      q.innerHTML = '<button type="button" aria-label="Fewer">−</button><output id="q-' + a.id + '"></output><button type="button" aria-label="More">+</button>';
+      const [minus, plus] = q.querySelectorAll("button");
+      minus.addEventListener("click", () => { state.sel[a.id].qty = Math.max(1, state.sel[a.id].qty - 1); state.sel[a.id].on = true; cb.checked = true; update(); });
+      plus.addEventListener("click", () => { state.sel[a.id].qty = Math.min(12, state.sel[a.id].qty + 1); state.sel[a.id].on = true; cb.checked = true; update(); });
+      right.append(q);
+    }
+    const k = document.createElement("span");
+    k.className = "kwh"; k.id = "k-" + a.id;
+    right.append(k);
+    li.append(cb, lab, right);
+    ul.append(li);
+  }
+}
+
+/* ---------- Render: outputs ---------- */
+function update() {
+  const r = calculate(state.sel, state.hours);
+  const dl = durationLabel(state.hours);
+
+  for (const a of APPLIANCES) {
+    const s = state.sel[a.id];
+    const row = document.getElementById("row-" + a.id);
+    row.classList.toggle("on", s.on);
+    const wh = a.whEach ? a.whEach * s.qty : a.whDay;
+    document.getElementById("k-" + a.id).textContent = (wh >= 1000 ? (wh / 1000).toFixed(1) + " kWh" : wh + " Wh") + "/day";
+    if (a.qty) document.getElementById("q-" + a.id).textContent = s.qty;
+  }
+
+  const big = energyBig(r.neededWh);
+  document.getElementById("m-label").textContent = "Battery you need for " + dl;
+  document.getElementById("m-big").innerHTML = big.n + "<small>" + big.u + "</small>";
+  document.getElementById("m-day").textContent = r.dailyWh >= 1000 ? kwh(r.dailyWh, 2) : nf.format(r.dailyWh) + " Wh";
+  document.getElementById("m-watts").textContent = nf.format(r.outputW) + " W";
+  document.getElementById("m-count").textContent = r.okCount + " of " + PRODUCTS.length;
+
+  const explain = document.getElementById("m-explain");
+  const fit = document.getElementById("m-fit");
+  if (r.dailyWh === 0) {
+    explain.textContent = "Tick at least one thing you'd want to keep running.";
+    fit.textContent = "";
+  } else {
+    explain.textContent = "Your selection uses about " + kwh(r.dailyWh, 1) + " a day. We add 15% because power stations lose some energy converting to mains power.";
+    if (r.best) {
+      fit.innerHTML = "Best fit: <b></b>";
+      fit.querySelector("b").textContent = r.best.brand + " " + r.best.name;
+    } else {
+      const tooPower = r.products.every(p => !p.powerOk);
+      fit.textContent = tooPower
+        ? "Nothing here can supply " + nf.format(r.outputW) + " W at once. Untick the kettle or microwave."
+        : "None of these lasts " + dl + " on its own. Add an expansion battery, or cut back to the essentials.";
+    }
+  }
+
+  document.getElementById("d-num").textContent = big.n + " " + big.u;
+  document.getElementById("d-txt").textContent = "needed for " + dl + (r.best ? " · " + r.okCount + " match" + (r.okCount === 1 ? "" : "es") : "");
+
+  renderProducts(r);
+  renderNotes(r);
+}
+
+function renderProducts(r) {
+  const ul = document.getElementById("pps");
+  ul.innerHTML = "";
+  const target = state.hours;
+  const axisMax = target * 1.5;
+  const step = target <= 12 ? 6 : 24;
+  const sorted = [...r.products].sort((a, b) => (b.ok - a.ok) || (a.ok ? a.rrp - b.rrp : b.runtimeH - a.runtimeH));
+  for (const p of sorted) {
+    const li = document.createElement("li");
+    li.className = "pp" + (r.best && r.best.id === p.id ? " best" : "");
+    let chip, chipClass;
+    if (r.dailyWh === 0) { chip = "—"; chipClass = "warn"; }
+    else if (!p.powerOk) { chip = "Not powerful enough"; chipClass = "bad"; }
+    else if (r.best && r.best.id === p.id) { chip = "Best fit"; chipClass = "best"; }
+    else if (p.lastsOk) { chip = "Covers " + durationLabel(target); chipClass = "good"; }
+    else { chip = "Runs out early"; chipClass = "warn"; }
+
+    const pct = isFinite(p.runtimeH) ? Math.min(100, (p.runtimeH / axisMax) * 100) : 100;
+    const fillClass = !p.powerOk ? "bad" : (p.lastsOk ? "good" : "");
+    let ticks = "";
+    for (let t = step; t < axisMax; t += step) ticks += '<span class="tick" style="left:' + (t / axisMax * 100) + '%"></span>';
+    const targetLeft = (target / axisMax) * 100;
+
+    li.innerHTML =
+      '<div class="row1"><div class="title"><span class="brandname"></span><span class="pname"></span></div><span class="chip ' + chipClass + '"></span></div>' +
+      '<div class="spec"></div>' +
+      '<div class="bar" role="img"><div class="fill ' + fillClass + '" style="width:' + pct + '%"></div>' + ticks +
+      '<span class="target" style="left:calc(' + targetLeft + '% - 1px)"></span>' +
+      (pct >= 100 && p.powerOk ? '<span class="more">→</span>' : '') + '</div>' +
+      '<div class="row3"><div class="runtime"></div><a class="btn" rel="sponsored noopener" target="_blank">See today\'s price</a></div>' +
+      (!p.powerOk && r.dailyWh > 0 ? '<div class="why"></div>' : '');
+
+    li.querySelector(".brandname").textContent = p.brand;
+    li.querySelector(".pname").textContent = p.name;
+    li.querySelector(".chip").textContent = chip;
+    li.querySelector(".spec").textContent = nf.format(p.wh) + " Wh · " + nf.format(p.w) + " W output · RRP £" + nf.format(p.rrp) + (p.bundle ? " (bundle)" : "");
+    const runtime = li.querySelector(".runtime");
+    runtime.innerHTML = r.dailyWh === 0 ? "Tick something to see run time" : "Runs your selection for <b></b>";
+    if (r.dailyWh > 0) runtime.querySelector("b").textContent = durationText(p.runtimeH);
+    li.querySelector(".bar").setAttribute("aria-label", p.name + ": " + durationText(p.runtimeH) + " against a target of " + durationLabel(target));
+    li.querySelector(".btn").href = LINKS[p.id];
+    const why = li.querySelector(".why");
+    if (why) why.textContent = "Max " + nf.format(p.w) + " W, but you'd need " + nf.format(r.outputW) + " W" + (r.burstW > p.w ? " for the " + (r.burstW >= 3000 ? "kettle" : "microwave") : "") + ".";
+    ul.append(li);
+  }
+  document.getElementById("matches-sub").textContent =
+    "Bars show how long each one would run everything you've ticked. The black line marks " + durationLabel(target) + ".";
+}
+
+function renderNotes(r) {
+  const s = state.sel;
+  const notes = [];
+  if (s.kettle.on) notes.push({ alert: true, html: "<b>Kettles need about 3,000 W.</b> Only the bigger units here can boil one at full speed. A small camping gas stove is a cheaper way to boil water in a power cut." });
+  if (s.boiler.on) notes.push({ alert: true, html: "<b>Your boiler probably isn't on a plug.</b> Most are wired into a fused spur, so ask an electrician to fit a plug-in connection before you need it. Never wire a power station into your home's circuits yourself." });
+  if (s.cpap.on) notes.push({ alert: true, html: '<b>Rely on medical equipment?</b> Join the free <a href="https://www.thepsr.co.uk/">Priority Services Register</a> with your energy supplier and network operator, so they know to prioritise you in a power cut.' });
+  notes.push({ html: "<b>Keep the freezer shut.</b> A full freezer that stays closed usually keeps food frozen for around two days, so you can switch it off for stretches to save battery." });
+  notes.push({ html: "<b>Charge it before you need it.</b> Top the power station up every few months and before storms are forecast." });
+  notes.push({ html: '<b>Report a power cut on 105.</b> It\'s free in England, Scotland and Wales. The government\'s <a href="https://prepare.campaign.gov.uk/be-informed-about-hazards/power-cuts/">power cut advice</a> also suggests keeping a torch, spare batteries and a battery or wind-up radio.' });
+  const ul = document.getElementById("notes");
+  ul.innerHTML = "";
+  for (const n of notes) {
+    const li = document.createElement("li");
+    if (n.alert) li.className = "alert";
+    li.innerHTML = n.html;
+    ul.append(li);
+  }
+}
+
+/* ---------- Mobile dock ---------- */
+function setupDock() {
+  const dock = document.getElementById("dock");
+  const meter = document.getElementById("meter");
+  const matches = document.getElementById("matches");
+  if (!("IntersectionObserver" in window)) return;
+  const visible = new Set();
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) e.isIntersecting ? visible.add(e.target) : visible.delete(e.target);
+    dock.classList.toggle("hide", visible.size > 0);
+  }, { threshold: 0.15 });
+  io.observe(meter); io.observe(matches);
+}
+
+/* ---------- Boot ---------- */
+function start(saved) {
+  if (saved && saved.sel && saved.hours) {
+    state.hours = saved.hours;
+    for (const id in state.sel) if (saved.sel[id]) state.sel[id] = saved.sel[id];
+  }
+  buildInputs();
+  update();
+  setupDock();
+  try { window.claude?.hot?.snapshot?.(() => state); } catch (e) {}
+}
+window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+</script>
+</body>
+</html>
