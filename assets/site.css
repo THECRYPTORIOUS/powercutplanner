@@ -180,3 +180,6 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
 .bv-btn { margin-top: auto; align-self: flex-start; background: var(--meter-ink); color: #0D1820; font-weight: 600; text-decoration: none; padding: 10px 16px; border-radius: 999px; }
 .bv-btn:hover { background: #FFD27A; }
 @media (prefers-reduced-motion: reduce) { .bv li, .bv-unit { transition: none; } .bv li:hover, .bv li:hover .bv-unit { transform: none; } }
+
+table.fit { min-width: 0; }
+table.fit td:last-child { min-width: 9.5em; }
