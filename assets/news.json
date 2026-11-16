@@ -1,0 +1,54 @@
+{
+  "updated": "2026-11-16",
+  "items": [
+    {
+      "date": "2026-11-10",
+      "title": "BBC reveals its emergency radio plan for a national blackout",
+      "summary": "The BBC has a 'Black Sky' plan to keep broadcasting on FM radio for at least 72 hours if the power fails nationwide. The government says there is no specific threat to the grid.",
+      "source": "ADS Advance",
+      "url": "https://www.adsadvance.co.uk/bbc-black-sky-emergency-plans/"
+    },
+    {
+      "date": "2026-11-08",
+      "title": "Low wind triggers a grid warning for tight supplies",
+      "summary": "The grid operator NESO warned supplies would be tight on Monday 9 November as weak winds cut generation, then cancelled the notice. It is the seventh such warning this year, against one in 2025.",
+      "source": "Bloomberg",
+      "url": "https://www.bloomberg.com/news/articles/2026-11-08/low-wind-triggers-uk-power-grid-margin-warning-for-monday"
+    },
+    {
+      "date": "2026-11-07",
+      "title": "1,200 homes lose power after a lorry hits a power line in North Devon",
+      "summary": "A lorry's crane struck an 11kV overhead line near the A361 at Ashford and caught fire. National Grid restored all 1,205 properties by about 9pm.",
+      "source": "BBC via Yahoo News",
+      "url": "https://www.yahoo.com/news/weather-news/articles/power-cut-affects-1-000-122956375.html"
+    },
+    {
+      "date": "2026-11-03",
+      "title": "Economist questions whether the lights will stay on this winter",
+      "summary": "Oxford professor Sir Dieter Helm says relying on wind leaves Britain exposed in winter and calls for more backup power and storage. NESO says supplies will be secure.",
+      "source": "GB News",
+      "url": "https://www.gbnews.com/news/energy-expert-warning-britain-power-supply-winter"
+    },
+    {
+      "date": "2026-10-25",
+      "title": "Storm Boelo leaves 90,000 homes without power",
+      "summary": "Around 160,000 homes lost power at the peak and two men were killed by falling trees. About 90,000 were still off supply that evening.",
+      "source": "LBC",
+      "url": "https://www.lbc.co.uk/article/two-killed-falling-tress-strong-winds-batter-uk-storm-boelo-5HjdkRM_2"
+    },
+    {
+      "date": "2026-10-23",
+      "title": "Storm Austen cuts power to 16,000 homes in the South West",
+      "summary": "Dozens of schools in Cornwall opened late or stayed shut. National Grid said it had restored more than 12,000 properties by 8am on the Friday.",
+      "source": "AOL",
+      "url": "https://www.aol.co.uk/articles/thousands-homes-without-power-storm-113225000.html"
+    },
+    {
+      "date": "2026-10-23",
+      "title": "Winter blackout risk rises for the first time since 2022",
+      "summary": "NESO's winter outlook puts Britain's spare margin at 5.9GW, down from 6.1GW last year, though it still expects supplies to stay secure.",
+      "source": "The Telegraph via Yahoo News",
+      "url": "https://www.yahoo.com/news/world/articles/winter-blackout-risk-rises-first-050000248.html"
+    }
+  ]
+}

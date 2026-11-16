@@ -102,45 +102,22 @@
   }
 
 
-  /* Latest relevant news from GOV.UK (Open Government Licence v3.0). */
-  var GOV_BASE = "https://www.gov.uk/api/search.json?filter_content_purpose_supergroup=news_and_communications&count=40&fields=title,description,link,public_timestamp,organisations";
-  var GOV_QUERIES = [
-    "&filter_organisations=cabinet-office&q=" + encodeURIComponent("prepare emergency resilience winter"),
-    "&q=" + encodeURIComponent("power cut electricity outage blackout"),
-    "&q=" + encodeURIComponent("energy security winter supply storm")
-  ];
-  // Matched against the title only, so policy news that merely mentions energy security stays out.
-  var KEEP = /power cut|blackout|outage|prepared|prepare|preparedness|emergenc|resilien|winter weather|storm|cyber attack|critical infrastructure|national risk register|electricity suppl|energy suppl|gas suppl|be ready/i;
-  var DROP = /planning act|development consent|safety zone|tribunal|\bv\b/i;
-
-  function loadGov() {
-    var box = document.getElementById("gov-feed");
+  /* Latest power cut news: headlines and summaries written by Power Cut Planner, linking to the original reports. */
+  function loadNews() {
+    var box = document.getElementById("news-feed");
     if (!box) return;
-    var from = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
-    Promise.all(GOV_QUERIES.map(function (q) {
-      return getJSON(GOV_BASE + q + "&filter_public_timestamp=from:" + from).then(function (j) { return j.results || []; }).catch(function () { return []; });
-    })).then(function (sets) {
-      var seen = {}, items = [];
-      sets.forEach(function (rs) {
-        rs.forEach(function (r) {
-          if (!r.link || seen[r.link]) return;
-          var orgs = (r.organisations || []).map(function (o) { return o.slug || ""; }).join(" ");
-          if (!KEEP.test(r.title || "") || DROP.test(r.title || "") || /tribunal|hmcts/.test(orgs)) return;
-          seen[r.link] = 1; items.push(r);
-        });
-      });
-      items.sort(function (a, b) { return new Date(b.public_timestamp) - new Date(a.public_timestamp); });
+    getJSON("/assets/news.json?t=" + Math.floor(Date.now() / 60000)).then(function (d) {
+      var items = (d.items || []).slice().sort(function (a, b) { return new Date(b.date) - new Date(a.date); });
       if (!items.length) { box.hidden = true; return; }
       box.hidden = false;
+      var upd = box.querySelector(".nf-updated");
+      if (upd && d.updated) upd.textContent = "Updated " + new Date(d.updated).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
       box.querySelector(".gf-list").innerHTML = items.slice(0, 6).map(function (r) {
-        var d = new Date(r.public_timestamp);
-        var org = (r.organisations || []).map(function (o) { return o.acronym || o.title; }).filter(Boolean).slice(0, 2).join(", ");
-        var desc = String(r.description || "");
-        if (desc.length > 150) desc = desc.slice(0, 147).replace(/\s+\S*$/, "") + "…";
-        return '<li><time>' + esc(d.toLocaleDateString("en-GB", { day: "numeric", month: "short" })) + '</time><div><a href="https://www.gov.uk' + esc(r.link) + '">' + esc(r.title) + '</a>' +
-          (desc ? '<p>' + esc(desc) + '</p>' : '') + (org ? '<span class="gf-org">' + esc(org) + '</span>' : '') + '</div></li>';
+        var dt = new Date(r.date);
+        return '<li><time>' + esc(dt.toLocaleDateString("en-GB", { day: "numeric", month: "short" })) + '</time><div><a href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc(r.title) + '</a>' +
+          (r.summary ? '<p>' + esc(r.summary) + '</p>' : '') + '<span class="gf-org">' + esc(r.source || "") + '</span></div></li>';
       }).join("");
-    });
+    }).catch(function () { box.hidden = true; });
   }
 
   function load() {
@@ -157,5 +134,5 @@
     load();
     setInterval(function () { if (!document.hidden) load(); }, REFRESH_MS);
   }
-  if (document.getElementById("gov-feed")) loadGov();
+  if (document.getElementById("news-feed")) loadNews();
 })();
