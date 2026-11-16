@@ -416,3 +416,19 @@ table.fit td:last-child { min-width: 9.5em; }
 .sol-dock em { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .sol-dock i { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--meter-ink); color: #1A1200; flex: none; align-self: center; }
 .sol-teaser .st-in { padding-top: 36px; padding-bottom: 38px; }
+
+/* Plug-in solar kits page */
+.skc { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 6px; scroll-margin-top: 16px; transition: transform .18s ease, box-shadow .18s ease; }
+.skc:hover { transform: translateY(-3px); box-shadow: 0 10px 26px rgba(15,29,39,.10); }
+.skc[hidden] { display: none; }
+.skc:target { border-color: var(--lamp); box-shadow: 0 0 0 2px var(--lamp); }
+.skc-top { display: flex; justify-content: space-between; align-items: center; }
+.skc-stock { font-size: .74rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; }
+.skc-stock.ok { background: #DDF1E5; color: #1F7646; }
+.skc-stock.pre { background: var(--lamp-soft); color: var(--lamp-ink); }
+.skc-nums { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--meter-bg); color: #C9D5DD; border-radius: 10px; padding: 10px 12px; margin-top: 2px; }
+.skc-nums b { display: block; font-family: var(--display); font-weight: 700; font-size: 1.6rem; line-height: 1; color: var(--meter-ink); }
+.skc-nums span { font-size: .74rem; }
+.skc-ena { margin: 0; font-size: .8rem; flex: 1; }
+.skc-ena a { color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .skc { transition: none; } }
