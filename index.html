@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/site.css?v=a7951e76">
 <style>
 /* Layout: mobile = readout, picker, matches stacked; desktop = picker left, sticky readout + matches right. */
 :root {
@@ -630,6 +630,11 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
     <p class="lp-note">Covers London, the South East, the East of England, the North East and Yorkshire, and refreshes every few minutes. Anywhere else, check <a href="https://www.powercut105.com/">powercut105.com</a> or call 105.</p>
     <p class="lp-attr">Contains data from <a href="https://ukpowernetworks.opendatasoft.com/explore/dataset/ukpn-live-faults/">UK Power Networks</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Supported by Northern Powergrid Open Data (<a href="https://northernpowergrid.opendatasoft.com/p/opendatalicence/">licence</a>).</p>
     <a class="lp-cta" href="guides/power-cut-what-to-do/">Power cut now? What to do &rarr;</a>
+  </div>
+  <div class="gf-box" id="gov-feed" hidden>
+    <div class="lp-head"><h2>Latest from the government</h2><span class="gf-pill">Live from GOV.UK</span></div>
+    <ul class="gf-list"></ul>
+    <p class="lp-attr">Contains public sector information licensed under the <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.</p>
   </div>
 </section>
 </div>
@@ -1613,6 +1618,6 @@ function start(saved) {
 }
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 </script>
-<script src="assets/live.js?v=c45bd000" defer></script>
+<script src="assets/live.js?v=9e7332a1" defer></script>
 </body>
 </html>
