@@ -15,7 +15,10 @@
     return fetch(url, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
   }
   function title(s) {
-    return String(s || "").toLowerCase().replace(/\bzone\b/g, "").trim().replace(/\b\w/g, function (c) { return c.toUpperCase(); });
+    var t = String(s || "").toLowerCase().replace(/\bzone\b/g, "").trim();
+    // UK Power Networks names some London zones by compass point only; the postcode says more.
+    if (/^(north|south|east|west|central)( (north|south|east|west))?$/.test(t)) return "";
+    return t.replace(/\b\w/g, function (c) { return c.toUpperCase(); });
   }
   function district(pc) {
     pc = String(pc || "").trim().toUpperCase().replace(/\s+/g, " ");
@@ -87,7 +90,7 @@
       p.querySelector(".lp-updated").textContent = "Updated " + updated.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
       var ul = p.querySelector(".lp-list");
       ul.innerHTML = list.slice(0, 10).map(function (c) {
-        return '<li><span class="lp-dot" aria-hidden="true"></span><span class="lp-txt">' + itemHtml(c, true) + '</span><span class="lp-src">' + esc(c.region) + "</span></li>";
+        return '<li><span class="lp-dot" aria-hidden="true"></span><span class="lp-txt">' + itemHtml(c, true) + '</span><span class="lp-src">' + esc(c.src) + "</span></li>";
       }).join("") || "<li><span class=\"lp-txt\">No unplanned power cuts reported in these areas right now.</span></li>";
     }
   }

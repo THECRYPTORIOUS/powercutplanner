@@ -489,6 +489,14 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 </head>
 <body>
 <header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="power-stations/">Compare</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
+<div class="live-ticker" id="live-ticker" hidden>
+  <div class="wrap lt-inner">
+    <a class="lt-label" href="#live"><span class="lt-dot" aria-hidden="true"></span>Live</a>
+    <span class="lt-count">Power cuts right now</span>
+    <div class="lt-viewport" aria-hidden="true"><div class="lt-items"></div></div>
+    <a class="lt-more" href="#live">See all &rarr;</a>
+  </div>
+</div>
 <header class="top">
   <canvas class="skyline" id="skyline" aria-hidden="true"></canvas>
   <div class="wrap hero">
@@ -523,14 +531,6 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
     </figure>
   </div>
 </header>
-<div class="live-ticker" id="live-ticker" hidden>
-  <div class="wrap lt-inner">
-    <a class="lt-label" href="#live"><span class="lt-dot" aria-hidden="true"></span>Live</a>
-    <span class="lt-count">Power cuts right now</span>
-    <div class="lt-viewport" aria-hidden="true"><div class="lt-items"></div></div>
-    <a class="lt-more" href="#live">See all &rarr;</a>
-  </div>
-</div>
 
 <main class="wrap layout" id="calc">
   <section class="readout">
