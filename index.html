@@ -133,7 +133,7 @@ h1 {
 .layout {
   display: grid; gap: 22px; padding-top: 22px; padding-bottom: 40px;
   grid-template-columns: 1fr;
-  grid-template-areas: "readout" "picker" "matches" "notes";
+  grid-template-areas: "picker" "readout" "matches" "notes";
 }
 .readout { grid-area: readout; }
 .picker { grid-area: picker; }
@@ -537,6 +537,18 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 </header>
 
 <main class="wrap layout" id="calc">
+  <section class="picker">
+    <div class="panel">
+      <h2><span class="step">1</span>What do you need running?</h2>
+      <p class="sub">Tap everything you'd want to keep running.</p>
+      <fieldset class="durations" id="durations">
+        <legend>How long should it last?</legend>
+      </fieldset>
+      <ul class="apps" id="apps"></ul>
+      <p class="apps-hint">Tap to add or remove. Figures are typical UK appliances; check your own labels to be exact.</p>
+    </div>
+  </section>
+
   <section class="readout">
     <div class="side-sticky">
       <div class="meter" id="meter">
@@ -566,18 +578,6 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="picker">
-    <div class="panel">
-      <h2><span class="step">1</span>What do you need running?</h2>
-      <p class="sub">Tap everything you'd want to keep running.</p>
-      <fieldset class="durations" id="durations">
-        <legend>How long should it last?</legend>
-      </fieldset>
-      <ul class="apps" id="apps"></ul>
-      <p class="apps-hint">Tap to add or remove. Figures are typical UK appliances; check your own labels to be exact.</p>
     </div>
   </section>
 
