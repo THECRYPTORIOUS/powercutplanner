@@ -24,7 +24,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/site.css?v=a7951e76">
+<link rel="stylesheet" href="assets/site.css?v=bf623724">
 <style>
 /* Layout: mobile = readout, picker, matches stacked; desktop = picker left, sticky readout + matches right. */
 :root {
@@ -333,6 +333,8 @@ header.top .lede a { color: #FFFFFF; text-decoration-color: var(--meter-ink); }
 .now-link { margin: 14px 0 0; font-size: .95rem; }
 .now-link a { color: #C9D4DC; text-decoration: underline; text-underline-offset: 3px; }
 .now-link a:hover { color: var(--meter-ink); }
+.now-link.sol-link { margin-top: 6px; }
+.sol-link span { color: var(--meter-ink); }
 .runbars { margin: 0; background: rgba(255,255,255,.035); border: 1px solid #22323E; border-radius: var(--radius); padding: 18px; }
 .runbars figcaption { font-family: var(--display); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: .8rem; color: var(--meter-dim); margin-bottom: 14px; }
 .rb-row + .rb-row { margin-top: 14px; }
@@ -488,7 +490,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 <style>footer.wrap nav { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:12px; }</style>
 </head>
 <body>
-<header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="power-stations/">Compare</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
+<header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="plug-in-solar/">Solar</a><a href="power-stations/">Compare</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
 <div class="live-ticker" id="live-ticker" hidden>
   <div class="wrap lt-inner">
     <a class="lt-label" href="#live"><span class="lt-dot" aria-hidden="true"></span>Live</a>
@@ -512,6 +514,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
         <a class="btn-ghost" href="guides/why-the-government-says-prepare-for-power-cuts/">Why now →</a>
       </div>
       <p class="now-link"><a href="guides/power-cut-what-to-do/"><span aria-hidden="true">⚡</span> Power cut right now? What to do →</a></p>
+      <p class="now-link sol-link"><a href="plug-in-solar/"><span aria-hidden="true">☀</span> New: would plug-in solar save you money? →</a></p>
     </div>
     <figure class="runbars" aria-label="How long power stations last on a fridge-freezer, Wi-Fi, three lamps and two phones: 1 kWh about 18 hours, 2 kWh about 37 hours, 4 kWh about 3 days.">
       <figcaption>Fridge-freezer, Wi-Fi, 3 lamps and 2 phones</figcaption>
@@ -669,6 +672,34 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   <span class="bv-sub">£1,352 at Jackery UK (Black Friday price to 30 Nov) · 3,072 Wh · 3,600 W</span>
   <a class="bv-btn" href="https://uk.jackery.com/pages/portable-power-stations" rel="sponsored noopener" target="_blank">See today's price</a>
 </li></ul>
+</div>
+</section>
+<section class="sol-teaser" aria-labelledby="st-h">
+<div class="wrap st-in">
+  <div class="st-copy">
+    <span class="st-kicker">New calculator</span>
+    <h2 id="st-h">Would plug-in solar pay for itself?</h2>
+    <p>Plug-in solar is now legal in Great Britain. See what a panel in your garden or on your balcony would save you, and which of 21 UK kits pays back fastest.</p>
+    <a class="st-cta" href="plug-in-solar/">Work out my savings &rarr;</a>
+    <p class="st-note">One catch: <a href="guides/do-plug-in-solar-panels-work-in-a-power-cut/">it switches off in a power cut</a>.</p>
+  </div>
+  <svg class="sol-art" viewBox="0 0 300 220" aria-hidden="true">
+  <g class="sa-sun"><circle cx="238" cy="54" r="24" fill="#F5B641"/>
+  <g stroke="#F5B641" stroke-width="5" stroke-linecap="round">
+    <line x1="238" y1="14" x2="238" y2="4"/><line x1="238" y1="94" x2="238" y2="104"/>
+    <line x1="198" y1="54" x2="188" y2="54"/><line x1="278" y1="54" x2="288" y2="54"/>
+    <line x1="210" y1="26" x2="203" y2="19"/><line x1="266" y1="82" x2="273" y2="89"/>
+    <line x1="266" y1="26" x2="273" y2="19"/><line x1="210" y1="82" x2="203" y2="89"/></g></g>
+  <line x1="8" y1="198" x2="292" y2="198" stroke="#2A3A46" stroke-width="3" stroke-linecap="round"/>
+  <g stroke="#8FA3B1" stroke-width="5" stroke-linecap="round"><line x1="80" y1="108" x2="98" y2="198"/><line x1="196" y1="108" x2="214" y2="198"/><line x1="52" y1="168" x2="52" y2="198"/><line x1="168" y1="168" x2="168" y2="198"/></g>
+  <polygon points="46,170 172,170 202,104 76,104" fill="#16385A" stroke="#4FB3BF" stroke-width="3" stroke-linejoin="round"/>
+  <g stroke="#4FB3BF" stroke-width="1.5" opacity=".8"><line x1="77.5" y1="170" x2="107.5" y2="104"/><line x1="109" y1="170" x2="139" y2="104"/><line x1="140.5" y1="170" x2="170.5" y2="104"/><line x1="61" y1="137" x2="187" y2="137"/></g>
+  <polygon class="sa-glint" points="96,104 114,104 84,170 66,170" fill="#fff" opacity=".12"/>
+  <path d="M160 172 C 172 204, 222 206, 238 180" stroke="#C9D3DA" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <rect x="222" y="134" width="50" height="50" rx="9" fill="#E9EEF1"/>
+  <rect x="242" y="146" width="10" height="5" rx="1.5" fill="#566672"/><rect x="232" y="160" width="6" height="11" rx="1.5" fill="#566672"/><rect x="256" y="160" width="6" height="11" rx="1.5" fill="#566672"/>
+  <path class="sa-bolt" d="M126 60 112 80h10l-3 14 15-21h-10l2-13z" fill="#F5B641"/>
+</svg>
 </div>
 </section>
 <section class="why wrap" aria-labelledby="why-h">
