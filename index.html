@@ -523,6 +523,14 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
     </figure>
   </div>
 </header>
+<div class="live-ticker" id="live-ticker" hidden>
+  <div class="wrap lt-inner">
+    <a class="lt-label" href="#live"><span class="lt-dot" aria-hidden="true"></span>Live</a>
+    <span class="lt-count">Power cuts right now</span>
+    <div class="lt-viewport" aria-hidden="true"><div class="lt-items"></div></div>
+    <a class="lt-more" href="#live">See all &rarr;</a>
+  </div>
+</div>
 
 <main class="wrap layout" id="calc">
   <section class="readout">
@@ -611,6 +619,20 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   </section>
 </main>
 
+<div class="wrap"><section class="live-wrap" id="live" aria-labelledby="live-h">
+  <div class="lp-box" id="live-panel" hidden>
+    <div class="lp-head"><h2 id="live-h"><span class="lt-dot" aria-hidden="true"></span>Live power cuts</h2><span class="lp-updated"></span></div>
+    <div class="lp-stats">
+      <div><b class="lp-count">&ndash;</b><span>unplanned power cuts right now</span></div>
+      <div><b class="lp-homes">&ndash;</b><span>homes affected, where reported</span></div>
+    </div>
+    <ul class="lp-list"></ul>
+    <p class="lp-note">Covers London, the South East, the East of England, the North East and Yorkshire, and refreshes every few minutes. Anywhere else, check <a href="https://www.powercut105.com/">powercut105.com</a> or call 105.</p>
+    <p class="lp-attr">Contains data from <a href="https://ukpowernetworks.opendatasoft.com/explore/dataset/ukpn-live-faults/">UK Power Networks</a>, licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Supported by Northern Powergrid Open Data (<a href="https://northernpowergrid.opendatasoft.com/p/opendatalicence/">licence</a>).</p>
+    <a class="lp-cta" href="guides/power-cut-what-to-do/">Power cut now? What to do &rarr;</a>
+  </div>
+</section>
+</div>
 <section class="bestvalue" aria-labelledby="bv-h">
 <div class="wrap">
   <div class="bv-head">
@@ -1591,5 +1613,6 @@ function start(saved) {
 }
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 </script>
+<script src="assets/live.js" defer></script>
 </body>
 </html>

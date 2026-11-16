@@ -183,3 +183,42 @@ td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-spa
 
 table.fit { min-width: 0; }
 table.fit td:last-child { min-width: 9.5em; }
+
+/* Live power cuts: ticker under the hero and full panel */
+.live-ticker { background: #0A1218; border-bottom: 1px solid #22323E; color: #C9D5DD; font-size: .88rem; }
+.lt-inner { display: flex; align-items: center; gap: 12px; padding-top: 9px; padding-bottom: 9px; flex-wrap: wrap; }
+.lt-label { display: inline-flex; align-items: center; gap: 7px; background: #3A1610; color: #FF8A6C; border: 1px solid rgba(255,90,60,.5); border-radius: 999px; padding: 2px 10px 2px 8px; font-family: var(--display); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: .78rem; text-decoration: none; }
+.lt-dot { width: 8px; height: 8px; border-radius: 50%; background: #FF5A3C; display: inline-block; animation: lt-pulse 1.6s ease-out infinite; flex: none; }
+@keyframes lt-pulse { 0% { box-shadow: 0 0 0 0 rgba(255,90,60,.7); } 70% { box-shadow: 0 0 0 8px rgba(255,90,60,0); } 100% { box-shadow: 0 0 0 0 rgba(255,90,60,0); } }
+.lt-count { color: #FFFFFF; font-weight: 600; white-space: nowrap; }
+.lt-viewport { flex: 1 1 260px; min-width: 0; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.lt-items { display: inline-flex; gap: 28px; white-space: nowrap; animation: lt-scroll 60s linear infinite; padding-left: 8px; }
+.lt-items.still { animation: none; }
+.lt-viewport:hover .lt-items { animation-play-state: paused; }
+@keyframes lt-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.lt-item b { color: var(--meter-ink); font-weight: 600; }
+.lt-item::before { content: "●"; color: #FF5A3C; margin-right: 8px; font-size: .7em; vertical-align: middle; }
+.lt-more { color: var(--meter-ink); text-decoration: none; font-weight: 600; white-space: nowrap; }
+@media (max-width: 640px) { .lt-viewport { flex-basis: 100%; order: 3; } .lt-more { margin-left: auto; } }
+.live-wrap { margin: 28px 0 8px; }
+.article .live-wrap { margin: 18px 0 22px; }
+.lp-box { background: var(--meter-bg); color: #C9D5DD; border-radius: var(--radius); padding: 18px; border: 1px solid #22323E; border-top: 3px solid #FF5A3C; }
+.lp-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.lp-head h2 { display: inline-flex; align-items: center; gap: 10px; color: #FFFFFF; font-family: var(--display); font-weight: 700; text-transform: uppercase; letter-spacing: .03em; font-size: 1.5rem; margin: 0; }
+.lp-updated { font-family: var(--mono); font-size: .78rem; color: var(--meter-dim); }
+.lp-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 0; }
+.lp-stats div { background: #12212C; border: 1px solid #22394A; border-radius: 10px; padding: 10px 12px; }
+.lp-stats b { display: block; font-family: var(--display); font-weight: 700; font-size: 2.4rem; line-height: 1; color: var(--meter-ink); }
+.lp-stats span { font-size: .82rem; color: var(--meter-dim); }
+.lp-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1px; background: #1A2A35; border-radius: 8px; overflow: hidden; }
+.lp-list li { display: flex; align-items: center; gap: 10px; background: #0F1C25; padding: 9px 12px; font-size: .9rem; }
+.lp-list li b { color: #FFFFFF; }
+.lp-txt { flex: 1; min-width: 0; }
+.lp-dot { width: 7px; height: 7px; border-radius: 50%; background: #FF5A3C; flex: none; }
+.lp-src { font-size: .72rem; color: var(--meter-dim); white-space: nowrap; }
+@media (max-width: 520px) { .lp-src { display: none; } }
+.lp-note, .lp-attr { font-size: .8rem; color: var(--meter-dim); margin: 10px 0 0; }
+.lp-note a, .lp-attr a { color: #E9EEF1; }
+.lp-cta { display: inline-block; margin-top: 12px; color: #1A1200; background: var(--meter-ink); text-decoration: none; font-weight: 600; padding: 9px 14px; border-radius: 8px; font-size: .92rem; }
+.lp-cta:hover { background: #FFD27A; }
+@media (prefers-reduced-motion: reduce) { .lt-dot { animation: none; } .lt-items { animation: none; } .lt-viewport { overflow-x: auto; } }
