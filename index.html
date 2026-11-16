@@ -15,6 +15,12 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#0D1820">
+<meta property="og:image" content="https://powercutplanner.co.uk/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Be ready for 72 hours without power: how big a power station do you need?">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://powercutplanner.co.uk/assets/og.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -161,28 +167,42 @@ h2 {
 .durations input:checked + label { background: var(--ink); color: var(--surface); border-color: var(--ink); }
 .durations input:focus-visible + label { outline: 3px solid var(--lamp); outline-offset: 2px; }
 
-/* Appliances */
-.apps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
-.app {
-  display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center;
-  padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface);
-  transition: border-color .15s, background-color .15s;
+/* Appliances: tappable picture tiles */
+.apps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); }
+.tile {
+  position: relative; border: 1.5px solid var(--line); border-radius: 12px; background: var(--surface);
+  transition: border-color .15s, background-color .15s, box-shadow .2s, transform .12s;
 }
-.app.on { border-color: var(--lamp); background: var(--lamp-soft); }
-.app input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--lamp); margin: 0; cursor: pointer; }
-.app label { cursor: pointer; display: block; }
-.app .name { font-weight: 600; display: block; }
-.app .detail { color: var(--muted); font-size: .85rem; display: block; }
-.app .kwh { font-family: var(--mono); font-size: .78rem; color: var(--muted); white-space: nowrap; }
+.tile .tcb { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.tile label { display: flex; flex-direction: column; gap: 4px; padding: 12px 10px 10px; min-height: 108px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.tile .ic { width: 34px; height: 34px; color: var(--muted); transition: color .2s, filter .2s, transform .2s; }
+.tile .tname { font-weight: 600; font-size: .92rem; line-height: 1.2; margin-top: 4px; padding-right: 18px; }
+.tile .twh { font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+.tile .twh.hot { color: var(--bad); font-weight: 500; }
+.tile .tick {
+  position: absolute; top: 9px; right: 9px; width: 22px; height: 22px; border-radius: 50%;
+  border: 1.5px solid var(--line); display: grid; place-items: center; background: var(--surface); pointer-events: none;
+  transition: background-color .15s, border-color .15s, transform .2s;
+}
+.tile .tick svg { width: 13px; height: 13px; color: #1A1200; opacity: 0; transition: opacity .15s; }
+.tile.on { border-color: var(--lamp); background: var(--lamp-soft); box-shadow: 0 0 0 1px var(--lamp) inset, 0 6px 18px rgba(227,155,18,.16); }
+.tile.on .ic { color: var(--lamp-ink); filter: drop-shadow(0 0 7px rgba(245,182,65,.75)); transform: scale(1.06); }
+.tile.on .tick { background: var(--lamp); border-color: var(--lamp); }
+.tile.on .tick svg { opacity: 1; }
+.tile:hover { border-color: var(--lamp); }
+.tile:active { transform: scale(.97); }
+.tile .tcb:focus-visible + label { outline: 3px solid var(--lamp); outline-offset: 2px; border-radius: 12px; }
+.tile.pop { animation: tile-pop .35s ease; }
+@keyframes tile-pop { 0% { transform: scale(1); } 40% { transform: scale(1.05); } 100% { transform: scale(1); } }
+.tile .qty { margin: 0 10px 10px; display: flex; justify-content: space-between; }
 .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); }
 .qty button {
-  width: 32px; height: 32px; border: 0; background: transparent; color: var(--ink);
+  width: 34px; height: 30px; border: 0; background: transparent; color: var(--ink);
   font-size: 1.1rem; cursor: pointer; border-radius: 999px; font-family: var(--body);
 }
 .qty button:hover { background: var(--track); }
 .qty output { min-width: 22px; text-align: center; font-family: var(--mono); font-size: .9rem; }
-.app .right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
-.flag { font-size: .72rem; font-weight: 600; color: var(--bad); text-transform: uppercase; letter-spacing: .04em; }
+.apps-hint { margin: 10px 0 0; font-size: .82rem; color: var(--muted); }
 
 /* Readout (meter) */
 .meter {
@@ -380,6 +400,72 @@ header.top .hero { position: relative; z-index: 1; }
   .dead { opacity: 1; }
 }
 
+
+/* Power cut simulator inside the meter */
+.meter .m-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; flex-wrap: wrap; }
+.meter .explain { margin: 0 0 10px; }
+.sim { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--meter-line); }
+.sim-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 8px; }
+.sim-play {
+  display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(245,182,65,.5); background: rgba(245,182,65,.1);
+  color: var(--meter-ink); font: 600 .85rem var(--body); padding: 6px 12px; border-radius: 999px; cursor: pointer;
+}
+.sim-play:hover { background: rgba(245,182,65,.2); }
+.sim-play.nudge { animation: pulse-amber 1.6s ease-out infinite; }
+@keyframes pulse-amber { 0% { box-shadow: 0 0 0 0 rgba(245,182,65,.55); } 70% { box-shadow: 0 0 0 10px rgba(245,182,65,0); } 100% { box-shadow: 0 0 0 0 rgba(245,182,65,0); } }
+.scene { display: block; width: 100%; height: auto; border-radius: 8px; background: #0B1622; }
+.scene .ico { fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.scene.powered .badge { fill: #FFF4DC; }
+.scene.powered .ico { stroke: #7A4B00; }
+.scene:not(.powered) .badge { fill: #1B2833; }
+.scene:not(.powered) .ico { stroke: #4A5E6D; }
+.scene .flat-stamp { display: none; }
+.scene.is-dead .flat-stamp { animation: stamp-in .35s cubic-bezier(.2,1.4,.4,1) both; }
+@keyframes stamp-in { from { opacity: 0; } to { opacity: 1; } }
+.scene.is-dead .flat-stamp { display: inline; }
+.sim-track { position: relative; height: 10px; background: #182631; border-radius: 5px; margin-top: 10px; overflow: visible; }
+.sim-fill { position: absolute; inset: 0 auto 0 0; width: 0; border-radius: 5px; background: linear-gradient(90deg, #F5B641, #FF9A3C); }
+.sim-fill.good { background: linear-gradient(90deg, #3FAE6E, #5CC98B); }
+.sim-flat { position: absolute; top: -5px; bottom: -5px; width: 3px; margin-left: -1px; background: #FF5A3C; border-radius: 2px; box-shadow: 0 0 10px rgba(255,90,60,.8); display: none; }
+.sim-axis { position: relative; height: 16px; margin-top: 4px; font-family: var(--mono); font-size: .68rem; color: var(--meter-dim); }
+.sim-axis span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.sim-axis span:first-child { transform: none; }
+.sim-axis span:last-child { transform: translateX(-100%); }
+.sim-status { margin: 8px 0 12px; color: #E9EEF1; font-size: .95rem; min-height: 2.6em; }
+.sim-status b { color: #FFFFFF; }
+.sim-status .bad { color: #FF8A6C; font-weight: 600; }
+.sim-status .ok { color: #6EDB9C; font-weight: 600; }
+.tiers-label { font-family: var(--display); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; font-size: .78rem; margin-bottom: 6px; }
+.tiers { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 6px; }
+.tier {
+  text-align: left; border: 1px solid #2A3C49; background: #12212C; color: #E9EEF1; border-radius: 10px; padding: 8px 10px; cursor: pointer;
+  font: inherit; display: flex; flex-direction: column; gap: 1px; transition: border-color .15s, background-color .15s, transform .12s;
+}
+.tier:hover { border-color: var(--meter-ink); }
+.tier:active { transform: scale(.97); }
+.tier[aria-checked="true"] { border-color: var(--meter-ink); background: rgba(245,182,65,.14); box-shadow: 0 0 0 1px var(--meter-ink) inset; }
+.tier .t-lab { font-family: var(--display); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; font-size: .86rem; color: var(--meter-ink); }
+.tier .t-name { font-size: .78rem; color: #C9D5DD; line-height: 1.25; }
+.tier .t-price { font-family: var(--mono); font-size: .86rem; color: #FFFFFF; margin-top: 2px; }
+.tier.try { animation: pulse-amber 1.6s ease-out infinite; }
+.sim-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.sim-buy { background: var(--meter-ink); color: #1A1200; text-decoration: none; font-weight: 600; padding: 9px 14px; border-radius: 8px; font-size: .92rem; }
+.sim-buy:hover { background: #FFD27A; }
+.share-btn {
+  display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(255,255,255,.28); background: transparent; color: #FFFFFF;
+  font: 600 .9rem var(--body); padding: 8px 12px; border-radius: 8px; cursor: pointer;
+}
+.share-btn:hover { border-color: var(--meter-ink); color: var(--meter-ink); }
+.share-btn svg { width: 16px; height: 16px; }
+.wa-link { color: #9FE3B8; font-size: .85rem; }
+@media (prefers-reduced-motion: reduce) { .sim-play.nudge, .tier.try, .tile.pop { animation: none !important; } }
+@media (min-width: 920px) {
+  .layout { grid-template-areas: "picker readout" "notes readout" "matches matches"; }
+  .side-sticky { position: static; }
+  .pps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scene { max-height: 270px; width: auto; max-width: 100%; margin: 0 auto; }
+}
+
 footer.wrap { border-top: 1px solid var(--line); padding-top: 18px; padding-bottom: 90px; color: var(--muted); font-size: .82rem; }
 footer p { max-width: 75ch; margin: 0 0 8px; }
 
@@ -440,18 +526,34 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 </header>
 
 <main class="wrap layout" id="calc">
-  <section class="readout" aria-live="polite">
+  <section class="readout">
     <div class="side-sticky">
       <div class="meter" id="meter">
         <div class="label" id="m-label">Battery you need for 3 days</div>
         <div class="big" id="m-big">4.0<small>kWh</small></div>
-        <p class="explain" id="m-explain">Your selection uses about 1.1 kWh a day. We add 15% because power stations lose some energy converting to mains power.</p>
+        <p class="explain" id="m-explain" aria-live="polite">Your selection uses about 1.1 kWh a day, plus 15% for conversion losses.</p>
         <dl>
           <div><dt>Per day</dt><dd id="m-day">1.14 kWh</dd></div>
           <div><dt>Output needed</dt><dd id="m-watts">226 W</dd></div>
           <div><dt>Covers it</dt><dd id="m-count">2 of 19</dd></div>
         </dl>
-        <div class="fit" id="m-fit">Best fit: <b>Jackery Explorer 2000 Plus v2 + Battery Pack 2000</b></div>
+        <div class="sim" id="sim">
+          <div class="sim-head">
+            <span class="label">Watch your power cut</span>
+            <button type="button" class="sim-play" id="sim-play"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M7 4v16l13-8z" fill="currentColor"/></svg><span>Play</span></button>
+          </div>
+          <svg class="scene" id="scene" viewBox="0 0 360 210" role="img" aria-label="Your house during a power cut"></svg>
+          <div class="sim-track" aria-hidden="true"><div class="sim-fill" id="sim-fill"></div><span class="sim-flat" id="sim-flat"></span></div>
+          <div class="sim-axis" id="sim-axis" aria-hidden="true"></div>
+          <p class="sim-status" id="sim-status" aria-live="polite"></p>
+          <div class="tiers-label">Try a power station</div>
+          <div class="tiers" id="tiers" role="radiogroup" aria-label="Try a power station"></div>
+          <div class="sim-acts">
+            <a class="sim-buy" id="sim-buy" rel="sponsored noopener" target="_blank" href="#">See today's price</a>
+            <button type="button" class="share-btn" id="share-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7M16 6l-4-4-4 4M12 2v13"/></svg><span>Share my result</span></button>
+            <a class="wa-link" id="wa-link" target="_blank" rel="noopener" href="#">WhatsApp</a>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -459,11 +561,12 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   <section class="picker">
     <div class="panel">
       <h2><span class="step">1</span>What do you need running?</h2>
-      <p class="sub">Typical UK figures. Check the label on your own appliance if you want to be exact.</p>
+      <p class="sub">Tap everything you'd want to keep running.</p>
       <fieldset class="durations" id="durations">
         <legend>How long should it last?</legend>
       </fieldset>
       <ul class="apps" id="apps"></ul>
+      <p class="apps-hint">Tap to add or remove. Figures are typical UK appliances; check your own labels to be exact.</p>
     </div>
   </section>
 
@@ -567,7 +670,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
     <div class="d-num" id="d-num">4.0 kWh</div>
     <div class="d-txt" id="d-txt">needed for 3 days</div>
   </div>
-  <a href="#matches" tabindex="-1">See matches</a>
+  <a href="#meter" id="dock-play" tabindex="-1">▶ Watch it</a>
 </div>
 
 <script>
@@ -793,20 +896,40 @@ const DETAIL_URL = "power-stations/";
 /* Typical UK figures. whDay = energy per day; w = watts drawn while running.
    burst = high-power item you'd use one at a time (kettle, microwave). */
 const APPLIANCES = [
-  { id: "fridgefreezer", name: "Fridge-freezer", detail: "Cycles on and off all day", whDay: 700, w: 150, on: true },
-  { id: "router", name: "Wi-Fi router and fibre box", detail: "About 12 W, on all day", whDay: 288, w: 12, on: true },
-  { id: "lights", name: "LED lamps", detail: "8 W each, 5 hours an evening", whEach: 40, w: 8, qty: 3, on: true },
-  { id: "phones", name: "Phone charges", detail: "One full charge each a day", whEach: 15, w: 20, qty: 2, on: true },
-  { id: "boiler", name: "Gas boiler (controls and pump)", detail: "About 100 W, heating on 6 hours", whDay: 600, w: 100 },
-  { id: "fridge", name: "Separate fridge", detail: "No freezer compartment", whDay: 350, w: 100 },
-  { id: "freezer", name: "Separate freezer", detail: "Chest or upright", whDay: 500, w: 100 },
-  { id: "laptop", name: "Laptop", detail: "50 W, 4 hours", whDay: 200, w: 50 },
-  { id: "tv", name: "TV", detail: "70 W, 4 hours", whDay: 280, w: 70 },
-  { id: "blanket", name: "Electric blanket", detail: "60 W, 3 hours", whDay: 180, w: 60 },
-  { id: "cpap", name: "CPAP machine", detail: "40 W overnight, no heated humidifier", whDay: 320, w: 40 },
-  { id: "microwave", name: "Microwave", detail: "About 1,300 W, 15 minutes a day", whDay: 300, w: 1300, burst: true },
-  { id: "kettle", name: "Kettle", detail: "About 3,000 W, 4 boils a day", whDay: 400, w: 3000, burst: true }
+  { id: "fridgefreezer", name: "Fridge-freezer", detail: "Cycles on and off all day", whDay: 700, w: 150, on: true, room: "kitchen" },
+  { id: "router", name: "Wi-Fi router", detail: "Router and fibre box, about 12 W, on all day", whDay: 288, w: 12, on: true, room: "study" },
+  { id: "lights", name: "LED lamps", detail: "8 W each, 5 hours an evening", whEach: 40, w: 8, qty: 3, on: true, room: "living" },
+  { id: "phones", name: "Phone charges", detail: "One full charge each a day", whEach: 15, w: 20, qty: 2, on: true, room: "bed" },
+  { id: "boiler", name: "Gas boiler", detail: "Controls and pump, about 100 W, heating on 6 hours", whDay: 600, w: 100, room: "kitchen" },
+  { id: "fridge", name: "Fridge", detail: "Separate fridge, no freezer compartment", whDay: 350, w: 100, room: "kitchen" },
+  { id: "freezer", name: "Freezer", detail: "Separate chest or upright freezer", whDay: 500, w: 100, room: "kitchen" },
+  { id: "laptop", name: "Laptop", detail: "50 W, 4 hours", whDay: 200, w: 50, room: "study" },
+  { id: "tv", name: "TV", detail: "70 W, 4 hours", whDay: 280, w: 70, room: "living" },
+  { id: "blanket", name: "Electric blanket", detail: "60 W, 3 hours", whDay: 180, w: 60, room: "bed" },
+  { id: "cpap", name: "CPAP machine", detail: "40 W overnight, no heated humidifier", whDay: 320, w: 40, room: "bed" },
+  { id: "microwave", name: "Microwave", detail: "About 1,300 W, 15 minutes a day", whDay: 300, w: 1300, burst: true, room: "kitchen" },
+  { id: "kettle", name: "Kettle", detail: "About 3,000 W, 4 boils a day", whDay: 400, w: 3000, burst: true, room: "kitchen" }
 ];
+
+/* Line icons (24 x 24), drawn for this site. */
+const ICONS = {
+  fridgefreezer: "M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM6 9h12M9 5v2M9 12v3",
+  router: "M3 13h18a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1zM6 16h.01M9 16h.01M9.5 9a3.5 3.5 0 0 1 5 0M7.2 6.4a6.8 6.8 0 0 1 9.6 0",
+  lights: "M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1v1h5v-1c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z",
+  phones: "M8 2h8a2 2 0 0 1 2 2v16a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zM11 18h2",
+  boiler: "M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM8 6.5h8M12 18c-1.7 0-3-1.2-3-2.8 0-1.6 1.5-2.6 2-4.2.9.8 1.2 1.6 1.1 2.4.5-.3.9-.8 1-1.5 1 .9 1.9 2 1.9 3.3 0 1.6-1.3 2.8-3 2.8z",
+  fridge: "M7 5h10a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM8.5 8.5v4",
+  freezer: "M3 9h18v11H3zM3 12.5h18M7 10.8h3M15 15v4M13.3 16l3.4 2M13.3 18l3.4-2",
+  laptop: "M5 5h14a1 1 0 0 1 1 1v9H4V6a1 1 0 0 1 1-1zM2 18h20l-1.5 2h-17z",
+  tv: "M4 5h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zM8 21h8M12 17v4",
+  blanket: "M2 19v-9M2 15h20M22 19v-6a2 2 0 0 0-2-2h-9v4M6.5 13a2 2 0 1 0 0-4 2 2 0 0 0 0 4z",
+  cpap: "M7 10c0-3 2.2-5 5-5s5 2 5 5v2c0 3-2.2 5-5 5s-5-2-5-5zM12 17v2a2 2 0 0 0 2 2h4M3 9l4 1M21 9l-4 1",
+  microwave: "M3 6h18a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1zM5 9h10v6H5zM18.5 9.5v.01M18.5 12v.01M18.5 14.5v.01",
+  kettle: "M6 20h11l-1-10H7zM8 10a4 4 0 0 1 7 0M16 11.5h2a2 2 0 0 1 2 2v1.5a2 2 0 0 1-2 2h-1.3M7.2 12.5 4 9.5M11 3c-.6.8-.6 1.4 0 2M13.5 3c-.6.8-.6 1.4 0 2"
+};
+function iconSvg(id, cls) {
+  return '<svg class="' + (cls || "ic") + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="' + ICONS[id] + '"/></svg>';
+}
 
 const DURATIONS = [
   { id: "d12", label: "12 hrs", hours: 12 },
@@ -858,7 +981,7 @@ function durationLabel(hours) { return DURATIONS.find(d => d.hours === hours).la
 function defaultState() {
   const sel = {};
   for (const a of APPLIANCES) sel[a.id] = { on: !!a.on, qty: a.qty || 1 };
-  return { sel, hours: 72, showAll: false };
+  return { sel, hours: 72, showAll: false, tierId: null, touched: false };
 }
 let state = defaultState();
 
@@ -869,38 +992,37 @@ function buildInputs() {
     const input = document.createElement("input");
     input.type = "radio"; input.name = "duration"; input.id = d.id; input.value = d.hours;
     input.checked = d.hours === state.hours;
-    input.addEventListener("change", () => { state.hours = d.hours; update(); });
+    input.addEventListener("change", () => { state.hours = d.hours; state.touched = true; update(); });
     const label = document.createElement("label");
     label.htmlFor = d.id; label.textContent = d.label;
     fs.append(input, label);
   }
   const ul = document.getElementById("apps");
+  const TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
   for (const a of APPLIANCES) {
     const li = document.createElement("li");
-    li.className = "app"; li.id = "row-" + a.id;
+    li.className = "tile"; li.id = "row-" + a.id; li.title = a.detail;
     const cb = document.createElement("input");
-    cb.type = "checkbox"; cb.id = "cb-" + a.id; cb.checked = state.sel[a.id].on;
-    cb.addEventListener("change", () => { state.sel[a.id].on = cb.checked; update(); });
+    cb.type = "checkbox"; cb.className = "tcb"; cb.id = "cb-" + a.id; cb.checked = state.sel[a.id].on;
+    cb.addEventListener("change", () => {
+      state.sel[a.id].on = cb.checked; state.touched = true;
+      if (cb.checked && !REDUCED) { li.classList.remove("pop"); void li.offsetWidth; li.classList.add("pop"); }
+      update();
+    });
     const lab = document.createElement("label");
     lab.htmlFor = cb.id;
-    lab.innerHTML = '<span class="name"></span><span class="detail"></span>';
-    lab.querySelector(".name").textContent = a.name;
-    lab.querySelector(".detail").textContent = a.detail;
-    const right = document.createElement("div");
-    right.className = "right";
+    lab.innerHTML = iconSvg(a.id) + '<span class="tname"></span><span class="twh" id="k-' + a.id + '"></span><span class="tick">' + TICK + '</span>';
+    lab.querySelector(".tname").textContent = a.name;
+    li.append(cb, lab);
     if (a.qty) {
       const q = document.createElement("div");
       q.className = "qty";
-      q.innerHTML = '<button type="button" aria-label="Fewer">−</button><output id="q-' + a.id + '"></output><button type="button" aria-label="More">+</button>';
+      q.innerHTML = '<button type="button" aria-label="Fewer ' + a.name.toLowerCase() + '">−</button><output id="q-' + a.id + '"></output><button type="button" aria-label="More ' + a.name.toLowerCase() + '">+</button>';
       const [minus, plus] = q.querySelectorAll("button");
-      minus.addEventListener("click", () => { state.sel[a.id].qty = Math.max(1, state.sel[a.id].qty - 1); state.sel[a.id].on = true; cb.checked = true; update(); });
-      plus.addEventListener("click", () => { state.sel[a.id].qty = Math.min(12, state.sel[a.id].qty + 1); state.sel[a.id].on = true; cb.checked = true; update(); });
-      right.append(q);
+      minus.addEventListener("click", () => { state.sel[a.id].qty = Math.max(1, state.sel[a.id].qty - 1); state.sel[a.id].on = true; state.touched = true; cb.checked = true; update(); });
+      plus.addEventListener("click", () => { state.sel[a.id].qty = Math.min(12, state.sel[a.id].qty + 1); state.sel[a.id].on = true; state.touched = true; cb.checked = true; update(); });
+      li.append(q);
     }
-    const k = document.createElement("span");
-    k.className = "kwh"; k.id = "k-" + a.id;
-    right.append(k);
-    li.append(cb, lab, right);
     ul.append(li);
   }
 }
@@ -915,7 +1037,9 @@ function update() {
     const row = document.getElementById("row-" + a.id);
     row.classList.toggle("on", s.on);
     const wh = a.whEach ? a.whEach * s.qty : a.whDay;
-    document.getElementById("k-" + a.id).textContent = (wh >= 1000 ? (wh / 1000).toFixed(1) + " kWh" : wh + " Wh") + "/day";
+    const k = document.getElementById("k-" + a.id);
+    if (a.burst) { k.textContent = nf.format(a.w) + " W"; k.classList.add("hot"); }
+    else k.textContent = (wh >= 1000 ? (wh / 1000).toFixed(1) + " kWh" : wh + " Wh") + " a day";
     if (a.qty) document.getElementById("q-" + a.id).textContent = s.qty;
   }
 
@@ -927,28 +1051,17 @@ function update() {
   document.getElementById("m-count").textContent = r.okCount + " of " + PRODUCTS.length;
 
   const explain = document.getElementById("m-explain");
-  const fit = document.getElementById("m-fit");
-  if (r.dailyWh === 0) {
-    explain.textContent = "Tick at least one thing you'd want to keep running.";
-    fit.textContent = "";
-  } else {
-    explain.textContent = "Your selection uses about " + kwh(r.dailyWh, 1) + " a day. We add 15% because power stations lose some energy converting to mains power.";
-    if (r.best) {
-      fit.innerHTML = "Best fit: <b></b>";
-      fit.querySelector("b").textContent = r.best.brand + " " + r.best.name;
-    } else {
-      const tooPower = r.products.every(p => !p.powerOk);
-      fit.textContent = tooPower
-        ? "Nothing here can supply " + nf.format(r.outputW) + " W at once. Untick the kettle or microwave."
-        : "None of these lasts " + dl + " on its own. Add an expansion battery, or cut back to the essentials.";
-    }
-  }
+  explain.textContent = r.dailyWh === 0
+    ? "Tick at least one thing you'd want to keep running."
+    : "Your selection uses about " + kwh(r.dailyWh, 1) + " a day, plus 15% for conversion losses.";
 
   document.getElementById("d-num").textContent = big.n + " " + big.u;
   document.getElementById("d-txt").textContent = "needed for " + dl + (r.best ? " · " + r.okCount + " match" + (r.okCount === 1 ? "" : "es") : "");
 
   renderProducts(r);
   renderNotes(r);
+  simRefresh(r);
+  saveToUrl();
 }
 
 function renderProducts(r) {
@@ -1131,6 +1244,322 @@ function skyline() {
   }
 }
 
+/* ---------- Power cut simulator: your lit house on a blacked-out street ---------- */
+const SVGNS = "http://www.w3.org/2000/svg";
+const ROOMS = [
+  { id: "bed", x: 108, y: 94 }, { id: "study", x: 182, y: 94 },
+  { id: "kitchen", x: 108, y: 144 }, { id: "living", x: 182, y: 144 }
+];
+const LAMP_ORDER = ["living", "kitchen", "bed", "study"];
+const sim = { r: null, p: null, tiers: [], target: 72, runtimeH: 0, endH: 0, raf: 0, played: false, visible: false, timer: 0, els: {} };
+
+function buildScene() {
+  const svg = document.getElementById("scene");
+  let stars = "";
+  for (let i = 0; i < 28; i++) {
+    const x = (i * 97 + 13) % 350 + 5, y = (i * 53 + 7) % 78 + 6, r = (i % 3 === 0) ? 1.2 : 0.8;
+    stars += '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#DCE6EE"/>';
+  }
+  let wins = "";
+  for (const rm of ROOMS) {
+    wins += '<rect x="' + rm.x + '" y="' + rm.y + '" width="70" height="42" rx="3" fill="#08121A" stroke="#33495A" stroke-width="1.5"/>' +
+            '<rect class="room-light" id="glow-' + rm.id + '" x="' + (rm.x + 1.5) + '" y="' + (rm.y + 1.5) + '" width="67" height="39" rx="2" fill="url(#warm)" opacity="0"/>' +
+            '<g id="icons-' + rm.id + '"></g>';
+  }
+  const neighbour = (x, w, top) =>
+    '<polygon points="' + (x - 6) + ',' + (top + 2) + ' ' + (x + w / 2) + ',' + (top - 34) + ' ' + (x + w + 6) + ',' + (top + 2) + '" fill="#0F1B24"/>' +
+    '<rect x="' + x + '" y="' + top + '" width="' + w + '" height="' + (196 - top) + '" fill="#0F1B24"/>' +
+    '<rect x="' + (x + 10) + '" y="' + (top + 14) + '" width="18" height="16" fill="#0A141B"/><rect x="' + (x + w - 28) + '" y="' + (top + 14) + '" width="18" height="16" fill="#0A141B"/>' +
+    '<rect x="' + (x + 10) + '" y="' + (top + 46) + '" width="18" height="16" fill="#0A141B"/><rect x="' + (x + w - 28) + '" y="' + (top + 46) + '" width="18" height="16" fill="#0A141B"/>';
+  svg.innerHTML =
+    '<defs><radialGradient id="warm" cx="50%" cy="40%" r="75%"><stop offset="0" stop-color="#FFE3A6"/><stop offset="1" stop-color="#F0A531" stop-opacity=".75"/></radialGradient>' +
+    '<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#F5B641" stop-opacity=".35"/><stop offset="1" stop-color="#F5B641" stop-opacity="0"/></radialGradient></defs>' +
+    '<rect id="sky" x="0" y="0" width="360" height="210" fill="#0A1420"/>' +
+    '<g id="stars">' + stars + '</g>' +
+    '<circle id="orb" cx="300" cy="40" r="9" fill="#DCE6EE"/>' +
+    neighbour(-14, 82, 112) + neighbour(296, 82, 116) +
+    '<ellipse id="house-halo" cx="180" cy="135" rx="120" ry="85" fill="url(#halo)" opacity="0"/>' +
+    '<rect x="0" y="196" width="360" height="14" fill="#081016"/>' +
+    '<rect x="225" y="40" width="15" height="30" fill="#1E2E39"/>' +
+    '<polygon points="84,86 180,32 276,86" fill="#22343F" stroke="#2F4554" stroke-width="1.5"/>' +
+    '<rect x="95" y="84" width="170" height="112" fill="#1A2933" stroke="#2C3F4D" stroke-width="1.5"/>' +
+    wins +
+    '<path d="M265 186 h8 v4" fill="none" stroke="#3A4C5A" stroke-width="2"/>' +
+    '<rect x="271" y="176" width="26" height="20" rx="3" fill="#2B3B47" stroke="#4A5E6D" stroke-width="1.2"/>' +
+    '<rect x="275" y="180" width="10" height="5" rx="1" fill="#0A141B"/><circle id="unit-led" cx="291" cy="182.5" r="2.2" fill="#5CC98B"/>' +
+    '<text id="clock" x="12" y="22" font-family="IBM Plex Mono, monospace" font-size="12" fill="#E9EEF1">DAY 1 · 18:00</text>' +
+    '<text x="12" y="38" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="11" letter-spacing="1.2" fill="#FF6A4C">● GRID OFF</text>' +
+    '<text id="batt-pct" x="292" y="26" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="12" fill="#E9EEF1">100%</text>' +
+    '<rect x="298" y="13" width="44" height="18" rx="3" fill="none" stroke="#93A6B4" stroke-width="1.5"/><rect x="342" y="18" width="3.5" height="8" rx="1" fill="#93A6B4"/>' +
+    '<rect id="batt-fill" x="300.5" y="15.5" width="39" height="13" rx="1.5" fill="#5CC98B"/>' +
+    '<g class="flat-stamp" transform="rotate(-7 180 140)"><rect x="104" y="124" width="152" height="32" rx="4" fill="rgba(10,20,27,.82)" stroke="#FF5A3C" stroke-width="2.5"/>' +
+    '<text id="stamp-text" x="180" y="146.5" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="20" letter-spacing="2" fill="#FF6A4C">BATTERY FLAT</text></g>';
+  for (const id of ["sky", "stars", "orb", "house-halo", "clock", "batt-pct", "batt-fill", "unit-led", "stamp-text"]) sim.els[id] = document.getElementById(id);
+  sim.els.glow = {};
+  for (const rm of ROOMS) sim.els.glow[rm.id] = document.getElementById("glow-" + rm.id);
+}
+
+function layoutRoomIcons() {
+  for (const rm of ROOMS) {
+    const g = document.getElementById("icons-" + rm.id);
+    const items = APPLIANCES.filter(a => a.room === rm.id && state.sel[a.id].on);
+    let html = "";
+    const rows = items.length > 3 ? [items.slice(0, 3), items.slice(3)] : [items];
+    rows.forEach((row, ri) => {
+      const n = row.length, w = n * 16 + (n - 1) * 6;
+      const y = rows.length === 1 ? rm.y + 13 : rm.y + 3 + ri * 19;
+      row.forEach((a, i) => {
+        const x = rm.x + (70 - w) / 2 + i * 22;
+        html += '<circle class="badge" cx="' + (x + 8) + '" cy="' + (y + 8) + '" r="9.5"/>' +
+                '<g transform="translate(' + (x + 2) + ' ' + (y + 2) + ') scale(.5)"><path class="ico" d="' + ICONS[a.id] + '"/></g>';
+      });
+    });
+    g.innerHTML = html;
+  }
+}
+
+function buildTiers(r) {
+  if (r.dailyWh === 0) return [];
+  const ok = r.products.filter(p => p.powerOk).sort((a, b) => a.rrp - b.rrp);
+  if (!ok.length) return [];
+  const pick = f => ok.find(f) || null;
+  const raw = [
+    { label: "Cheapest 1 kWh", p: pick(p => p.wh >= 1000) || ok[0] },
+    { label: "Lasts 1 day", p: pick(p => p.runtimeH >= 24) },
+    { label: "Lasts 2 days", p: pick(p => p.runtimeH >= 48) },
+    { label: "Lasts 3 days", p: pick(p => p.runtimeH >= 72) }
+  ];
+  const byId = new Map();
+  for (const t of raw) if (t.p) byId.set(t.p.id, t);
+  return [...byId.values()].sort((a, b) => a.p.rrp - b.p.rrp);
+}
+
+function hoursShort(h) {
+  const r = Math.round(h);
+  if (r < 24) return r + (r === 1 ? " hour" : " hours");
+  const d = Math.floor(r / 24), hh = r % 24;
+  return d + (d === 1 ? " day" : " days") + (hh ? " " + hh + "h" : "");
+}
+
+function simRefresh(r) {
+  sim.r = r;
+  sim.target = state.hours;
+  sim.tiers = buildTiers(r);
+  let chosen = sim.tiers.find(t => t.p.id === state.tierId) || sim.tiers[0] || null;
+  sim.p = chosen ? chosen.p : null;
+  sim.runtimeH = sim.p ? sim.p.runtimeH : 0;
+  if (!sim.p) sim.endH = 0;
+  else if (sim.runtimeH >= sim.target) sim.endH = sim.target;
+  else sim.endH = Math.min(sim.target, sim.runtimeH + Math.max(3, sim.target * 0.08));
+
+  // Tier chips
+  const box = document.getElementById("tiers");
+  box.innerHTML = "";
+  for (const t of sim.tiers) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "tier"; b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", String(sim.p && t.p.id === sim.p.id));
+    b.innerHTML = '<span class="t-lab"></span><span class="t-name"></span><span class="t-price"></span>';
+    b.querySelector(".t-lab").textContent = t.label;
+    b.querySelector(".t-name").textContent = t.p.brand + " " + t.p.name;
+    b.querySelector(".t-price").textContent = "£" + nf.format(t.p.rrp);
+    b.dataset.id = t.p.id;
+    b.addEventListener("click", () => { state.tierId = t.p.id; state.touched = true; simRefresh(sim.r); saveToUrl(); simPlay(); });
+    box.append(b);
+  }
+  document.querySelector(".tiers-label").hidden = sim.tiers.length === 0;
+
+  // Axis
+  const axis = document.getElementById("sim-axis");
+  const marks = sim.target === 12 ? [0, 6, 12] : sim.target === 24 ? [0, 12, 24] : sim.target === 48 ? [0, 24, 48] : [0, 24, 48, 72];
+  axis.innerHTML = marks.map(m => '<span style="left:' + (m / sim.target * 100) + '%">' + (m === 0 ? "Power off" : m < 24 || m % 24 ? m + "h" : "Day " + (m / 24)) + '</span>').join("");
+  const flat = document.getElementById("sim-flat");
+  if (sim.p && sim.p.powerOk && sim.runtimeH < sim.target) { flat.style.display = "block"; flat.style.left = (sim.runtimeH / sim.target * 100) + "%"; flat.style.opacity = "0"; }
+  else flat.style.display = "none";
+
+  // Buy and share links
+  const buy = document.getElementById("sim-buy");
+  buy.hidden = !sim.p;
+  if (sim.p) { buy.href = LINKS[sim.p.id] || "#"; buy.textContent = "See today's price · £" + nf.format(sim.p.rrp); }
+  const sh = shareData();
+  document.getElementById("wa-link").href = "https://wa.me/?text=" + encodeURIComponent(sh.text + " " + sh.url);
+
+  layoutRoomIcons();
+  document.getElementById("sim-status").innerHTML = statusHtml(false);
+  cancelAnimationFrame(sim.raf);
+  simFrame(0, performance.now());
+  if (sim.played) {
+    clearTimeout(sim.timer);
+    if (sim.visible) sim.timer = setTimeout(simPlay, 650);
+    else document.getElementById("sim-play").classList.add("nudge");
+  }
+}
+
+function statusHtml(done) {
+  const r = sim.r, p = sim.p, dl = durationLabel(sim.target);
+  if (!r || r.dailyWh === 0) return "Tick something you'd keep running to see your power cut.";
+  if (!p) return '<span class="bad">Nothing here can supply ' + nf.format(r.outputW) + ' W at once.</span> Untick the kettle or microwave.';
+  const name = "<b>" + escapeHtml(p.brand + " " + p.name) + "</b>";
+  if (!done) return name + " · " + nf.format(p.wh) + " Wh · £" + nf.format(p.rrp) + (sim.played ? "" : ". Press play to watch.");
+  if (p.runtimeH >= sim.target) {
+    const left = Math.max(0, Math.round((1 - sim.target / p.runtimeH) * 100));
+    return name + ' <span class="ok">lasts the full ' + dl + '</span>' + (isFinite(p.runtimeH) ? ", with about " + left + "% left." : ".");
+  }
+  const better = sim.tiers.find(t => t.p.runtimeH >= sim.target);
+  return name + ' goes flat after <span class="bad">about ' + hoursShort(p.runtimeH) + '</span>, short of ' + dl + "." +
+    (better ? " The cheapest that lasts " + dl + " is £" + nf.format(better.p.rrp) + "." : " Nothing here lasts that long on one battery.");
+}
+function escapeHtml(t) { return t.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+function mix(a, b, k) {
+  const pa = a.match(/\w\w/g).map(h => parseInt(h, 16)), pb = b.match(/\w\w/g).map(h => parseInt(h, 16));
+  return "rgb(" + pa.map((v, i) => Math.round(v + (pb[i] - v) * k)).join(",") + ")";
+}
+function smooth(e0, e1, x) { const t = Math.min(1, Math.max(0, (x - e0) / (e1 - e0))); return t * t * (3 - 2 * t); }
+
+function simFrame(h, now) {
+  const e = sim.els;
+  if (!e.sky) return;
+  const clockH = (18 + h) % 24;
+  const day = Math.floor((18 + h) / 24) + 1;
+  const daylight = smooth(7.5, 8.75, clockH) * (1 - smooth(15.5, 16.75, clockH));
+  const dark = 1 - daylight;
+  e.sky.setAttribute("fill", mix("0A1420", "4A6A86", daylight));
+  e.stars.setAttribute("opacity", (dark * 0.9).toFixed(2));
+  if (daylight > 0.5) {
+    const f = Math.min(1, Math.max(0, (clockH - 8) / 8));
+    e.orb.setAttribute("cx", (30 + 300 * f).toFixed(1)); e.orb.setAttribute("cy", (62 - 40 * Math.sin(Math.PI * f)).toFixed(1));
+    e.orb.setAttribute("fill", "#FFD27A"); e.orb.setAttribute("r", "11");
+  } else {
+    const f = ((clockH - 16 + 24) % 24) / 16;
+    e.orb.setAttribute("cx", (30 + 300 * f).toFixed(1)); e.orb.setAttribute("cy", (58 - 34 * Math.sin(Math.PI * f)).toFixed(1));
+    e.orb.setAttribute("fill", "#DCE6EE"); e.orb.setAttribute("r", "8");
+  }
+  e.clock.textContent = "DAY " + day + " · " + String(Math.floor(clockH)).padStart(2, "0") + ":" + (clockH % 1 >= 0.5 ? "30" : "00");
+
+  const p = sim.p, r = sim.r;
+  const has = r && r.dailyWh > 0 && p;
+  const powered = !!(has && p.powerOk && h < p.runtimeH);
+  const level = has && p.powerOk ? Math.max(0, 1 - h / p.runtimeH) : 0;
+  const scene = document.getElementById("scene");
+  scene.classList.toggle("powered", powered);
+  scene.classList.toggle("is-dead", !!has && !powered && (h > 0 || !p.powerOk));
+  e["stamp-text"].textContent = has && !p.powerOk ? "OVERLOADED" : "BATTERY FLAT";
+
+  let flick = 1;
+  if (powered && p.runtimeH - h < 1.5) flick = Math.sin(now / 37) + Math.sin(now / 23) > 0.4 ? 1 : 0.2;
+  const lampsOn = state.sel.lights.on;
+  const lit = lampsOn ? LAMP_ORDER.slice(0, Math.min(4, state.sel.lights.qty)) : [];
+  let houseGlow = 0;
+  for (const rm of ROOMS) {
+    const active = APPLIANCES.some(a => a.room === rm.id && state.sel[a.id].on);
+    let g = 0;
+    if (powered) g = lit.includes(rm.id) ? 0.45 + 0.55 * dark : active ? 0.28 : 0;
+    g *= flick;
+    houseGlow = Math.max(houseGlow, g * dark);
+    e.glow[rm.id].setAttribute("opacity", g.toFixed(2));
+  }
+  e["house-halo"].setAttribute("opacity", (houseGlow * 0.9).toFixed(2));
+  e["batt-pct"].textContent = Math.round(level * 100) + "%";
+  e["batt-fill"].setAttribute("width", (39 * level).toFixed(1));
+  e["batt-fill"].setAttribute("fill", level > 0.4 ? "#5CC98B" : level > 0.15 ? "#F5B641" : "#FF5A3C");
+  e["unit-led"].setAttribute("fill", powered ? "#5CC98B" : "#FF5A3C");
+
+  const fill = document.getElementById("sim-fill");
+  fill.style.width = (Math.min(1, h / sim.target) * 100) + "%";
+  fill.classList.toggle("good", !!(has && p.runtimeH >= sim.target));
+  const flat = document.getElementById("sim-flat");
+  if (flat.style.display === "block") flat.style.opacity = h >= sim.runtimeH ? "1" : "0";
+}
+
+function simPlay() {
+  if (!sim.r) return;
+  clearTimeout(sim.timer);
+  cancelAnimationFrame(sim.raf);
+  sim.played = true;
+  document.getElementById("sim-play").classList.remove("nudge");
+  document.querySelectorAll(".tier.try").forEach(t => t.classList.remove("try"));
+  document.getElementById("sim-status").innerHTML = statusHtml(false);
+  const end = () => {
+    simFrame(sim.endH, performance.now());
+    document.getElementById("sim-status").innerHTML = statusHtml(true);
+    if (sim.p && sim.p.runtimeH < sim.target) {
+      const better = sim.tiers.find(t => t.p.runtimeH >= sim.target);
+      if (better) { const b = document.querySelector('.tier[data-id="' + better.p.id + '"]'); if (b) b.classList.add("try"); }
+    }
+  };
+  if (REDUCED || !sim.p || sim.endH === 0) { end(); return; }
+  const total = Math.min(6500, Math.max(3200, sim.target / 72 * 6500));
+  const msPerHour = total / sim.target;
+  const t0 = performance.now();
+  const step = now => {
+    const h = Math.min(sim.endH, (now - t0) / msPerHour);
+    simFrame(h, now);
+    if (h < sim.endH) sim.raf = requestAnimationFrame(step); else end();
+  };
+  sim.raf = requestAnimationFrame(step);
+}
+
+function setupSim() {
+  buildScene();
+  document.getElementById("sim-play").addEventListener("click", simPlay);
+  document.getElementById("share-btn").addEventListener("click", shareResult);
+  const dockPlay = document.getElementById("dock-play");
+  if (dockPlay) dockPlay.addEventListener("click", () => setTimeout(simPlay, 500));
+  const scene = document.getElementById("scene");
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(es => {
+      sim.visible = es[0].isIntersecting;
+      if (sim.visible && !sim.played) setTimeout(() => { if (sim.visible && !sim.played) simPlay(); }, 350);
+      if (sim.visible && document.getElementById("sim-play").classList.contains("nudge")) setTimeout(simPlay, 350);
+    }, { threshold: 0.55 }).observe(scene);
+  } else { sim.visible = true; }
+}
+
+/* ---------- Share and link state ---------- */
+function encodeState() {
+  const parts = [];
+  for (const a of APPLIANCES) { const s = state.sel[a.id]; if (s.on) parts.push(a.qty ? a.id + "." + s.qty : a.id); }
+  return "d=" + state.hours + "&a=" + parts.join(",") + (state.tierId ? "&p=" + state.tierId : "");
+}
+function shareData() {
+  const base = /^https?:$/.test(location.protocol) ? location.origin + location.pathname : "https://powercutplanner.co.uk/";
+  const r = sim.r || calculate(state.sel, state.hours);
+  const b = energyBig(r.neededWh);
+  const text = "My home needs " + b.n + " " + b.u + " of battery to get through " + durationLabel(state.hours) + " without power. Work out yours:";
+  return { title: "Power Cut Planner", text, url: base + "?" + encodeState() };
+}
+function shareResult() {
+  const d = shareData();
+  const btn = document.getElementById("share-btn").querySelector("span");
+  if (navigator.share) { navigator.share(d).catch(() => {}); return; }
+  const done = () => { btn.textContent = "Link copied"; setTimeout(() => { btn.textContent = "Share my result"; }, 2200); };
+  if (navigator.clipboard) navigator.clipboard.writeText(d.text + " " + d.url).then(done, () => window.prompt("Copy this link:", d.url));
+  else window.prompt("Copy this link:", d.url);
+}
+function saveToUrl() {
+  if (!state.touched || !/^https?:$/.test(location.protocol)) return;
+  clearTimeout(saveToUrl.t);
+  saveToUrl.t = setTimeout(() => { try { history.replaceState(null, "", location.pathname + "?" + encodeState() + location.hash); } catch (e) {} }, 400);
+}
+function loadFromUrl() {
+  if (!location.search) return;
+  const q = new URLSearchParams(location.search);
+  const d = parseInt(q.get("d"), 10);
+  if (DURATIONS.some(x => x.hours === d)) state.hours = d;
+  if (q.has("a")) {
+    for (const id in state.sel) state.sel[id].on = false;
+    for (const part of q.get("a").split(",")) {
+      const [id, n] = part.split(".");
+      if (!state.sel[id]) continue;
+      state.sel[id].on = true;
+      const qty = parseInt(n, 10);
+      if (qty > 0 && qty <= 12) state.sel[id].qty = qty;
+    }
+  }
+  if (q.get("p") && PRODUCTS.some(x => x.id === q.get("p"))) state.tierId = q.get("p");
+}
+
 /* ---------- Mobile dock ---------- */
 function setupDock() {
   const dock = document.getElementById("dock");
@@ -1150,8 +1579,11 @@ function start(saved) {
   if (saved && saved.sel && saved.hours) {
     state.hours = saved.hours;
     for (const id in state.sel) if (saved.sel[id]) state.sel[id] = saved.sel[id];
+    if (saved.tierId) state.tierId = saved.tierId;
   }
+  loadFromUrl();
   buildInputs();
+  setupSim();
   update();
   setupDock();
   countUp72();
