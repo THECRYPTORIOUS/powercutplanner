@@ -376,6 +376,7 @@
       if (i === 0) badges += '<span class="kb kb-best">Fastest payback</span>';
       if (k.stock !== "In stock") badges += '<span class="kb">' + k.stock + '</span>';
       if (!k.mount) badges += '<span class="kb">No mount included</span>';
+      if (k.flex) badges += '<span class="kb kb-warn">Flexible panels: check fire rating</span>';
       var isCur = state.kit === k.id;
       html += '<li class="kr' + (isCur ? " is-cur" : "") + '" id="kit-' + k.id + '"' + (hide ? " hidden" : "") + '>' +
         '<span class="kr-rank">' + (i + 1) + '</span>' +

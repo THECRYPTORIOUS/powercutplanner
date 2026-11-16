@@ -432,3 +432,5 @@ table.fit td:last-child { min-width: 9.5em; }
 .skc-ena { margin: 0; font-size: .8rem; flex: 1; }
 .skc-ena a { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .skc { transition: none; } }
+.kb-warn { background: #FBE3DC; color: #9A3412; }
+.pc-specs li.kb-warn { background: #FBE3DC; color: #9A3412; font-weight: 600; }
