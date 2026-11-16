@@ -434,3 +434,25 @@ table.fit td:last-child { min-width: 9.5em; }
 @media (prefers-reduced-motion: reduce) { .skc { transition: none; } }
 .kb-warn { background: #FBE3DC; color: #9A3412; }
 .pc-specs li.kb-warn { background: #FBE3DC; color: #9A3412; font-weight: 600; }
+
+/* Black Friday page */
+.bf-kicker { display: inline-block; font-family: var(--display); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; font-size: .8rem; color: #fff; background: #111; border-radius: 999px; padding: 4px 12px; margin-top: 6px; }
+.bf-picks { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 10px; }
+@media (min-width: 720px) { .bf-picks { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.bf-pick { margin: 0; background: var(--meter-bg); color: #C9D5DD; border-radius: 14px; padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 3px; border: 1px solid #22323E; }
+.bf-size { font-family: var(--display); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; font-size: .78rem; color: var(--meter-ink); }
+.bf-brand { font-size: .8rem; color: #93A6B4; margin-top: 4px; }
+.bf-name { color: #fff; font-size: 1.08rem; line-height: 1.25; }
+.bf-price { font-family: var(--display); font-weight: 700; font-size: 2.1rem; line-height: 1; color: #fff; margin-top: 6px; }
+.bf-was { font-family: var(--body); font-weight: 400; font-size: .85rem; color: #93A6B4; text-decoration: line-through; margin-left: 6px; }
+.bf-kwh { font-size: .82rem; color: #B8C6D0; }
+.bf-btn { margin-top: 10px; display: block; text-align: center; background: var(--meter-ink); color: #1A1200; font-weight: 700; text-decoration: none; padding: 10px 12px; border-radius: 10px; font-size: .9rem; }
+.bf-btn:hover { background: #FFD27A; }
+.bf-table td, .bf-table th { white-space: nowrap; }
+.vt { display: inline-block; padding: 2px 8px; border-radius: 999px; font-weight: 700; }
+.vt-good { background: #DDF1E5; color: #1F7646; }
+.vt-fair { background: var(--lamp-soft); color: var(--lamp-ink); }
+.vt-prem { background: var(--track); color: var(--muted); }
+.article ul.bf-picks { padding: 0; margin: 0 0 10px; list-style: none; }
+.article .bf-picks > li.bf-pick { margin: 0; padding: 14px 16px 16px; }
+.article .bf-picks > li.bf-pick::before { display: none; content: none; }
