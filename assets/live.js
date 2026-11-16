@@ -109,13 +109,14 @@
     "&q=" + encodeURIComponent("power cut electricity outage blackout"),
     "&q=" + encodeURIComponent("energy security winter supply storm")
   ];
-  var KEEP = /power cut|blackout|outage|emergenc|prepared|prepare |resilien|winter weather|storm|cyber|critical infrastructure|energy security|security of supply|national risk register/i;
+  // Matched against the title only, so policy news that merely mentions energy security stays out.
+  var KEEP = /power cut|blackout|outage|prepared|prepare|preparedness|emergenc|resilien|winter weather|storm|cyber attack|critical infrastructure|national risk register|electricity suppl|energy suppl|gas suppl|be ready/i;
   var DROP = /planning act|development consent|safety zone|tribunal|\bv\b/i;
 
   function loadGov() {
     var box = document.getElementById("gov-feed");
     if (!box) return;
-    var from = new Date(Date.now() - 200 * 864e5).toISOString().slice(0, 10);
+    var from = new Date(Date.now() - 365 * 864e5).toISOString().slice(0, 10);
     Promise.all(GOV_QUERIES.map(function (q) {
       return getJSON(GOV_BASE + q + "&filter_public_timestamp=from:" + from).then(function (j) { return j.results || []; }).catch(function () { return []; });
     })).then(function (sets) {
@@ -124,8 +125,7 @@
         rs.forEach(function (r) {
           if (!r.link || seen[r.link]) return;
           var orgs = (r.organisations || []).map(function (o) { return o.slug || ""; }).join(" ");
-          var text = (r.title || "") + " " + (r.description || "");
-          if (!KEEP.test(text) || DROP.test(r.title || "") || /tribunal|hmcts/.test(orgs)) return;
+          if (!KEEP.test(r.title || "") || DROP.test(r.title || "") || /tribunal|hmcts/.test(orgs)) return;
           seen[r.link] = 1; items.push(r);
         });
       });
