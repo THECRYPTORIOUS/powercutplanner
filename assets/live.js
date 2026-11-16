@@ -64,7 +64,7 @@
     if (c.homes > 0) bits.push(c.homes.toLocaleString("en-GB") + (c.homes === 1 ? " home" : " homes"));
     if (c.since) bits.push("since " + fmtTime(c.since));
     if (long) bits.push(c.etr ? "estimated back " + fmtTime(c.etr) : "no estimate yet");
-    var where = (c.pc ? "<b>" + esc(c.pc) + "</b> " : "") + esc(c.place);
+    var where = [c.pc ? "<b>" + esc(c.pc) + "</b>" : "", c.place ? esc(c.place) : ""].filter(Boolean).join(" ");
     return where + (bits.length ? " · " + esc(bits.join(" · ")) : "");
   }
 
