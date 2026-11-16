@@ -237,6 +237,8 @@ h2 {
 }
 .btn:hover { background: var(--lamp); color: #1A1200; }
 .small { font-size: .8rem; color: var(--muted); }
+.show-all { margin-top: 12px; width: 100%; padding: 10px 14px; border-radius: 8px; border: 1px dashed var(--line); background: transparent; color: var(--ink); font: 600 .92rem var(--body); cursor: pointer; }
+.show-all:hover { border-color: var(--lamp); background: var(--lamp-soft); }
 
 /* Notes */
 .notes .panel + .panel { margin-top: 14px; }
@@ -386,7 +388,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 <style>footer.wrap nav { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:12px; }</style>
 </head>
 <body>
-<header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
+<header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="power-stations/">Compare</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
 <header class="top">
   <canvas class="skyline" id="skyline" aria-hidden="true"></canvas>
   <div class="wrap hero">
@@ -431,7 +433,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
         <dl>
           <div><dt>Per day</dt><dd id="m-day">1.14 kWh</dd></div>
           <div><dt>Output needed</dt><dd id="m-watts">226 W</dd></div>
-          <div><dt>Covers it</dt><dd id="m-count">2 of 9</dd></div>
+          <div><dt>Covers it</dt><dd id="m-count">2 of 19</dd></div>
         </dl>
         <div class="fit" id="m-fit">Best fit: <b>Jackery Explorer 2000 Plus v2 + Battery Pack 2000</b></div>
       </div>
@@ -459,7 +461,8 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
         <span><i style="background:repeating-linear-gradient(135deg,var(--bad) 0 4px,transparent 4px 7px)"></i>Not powerful enough</span>
       </div>
       <ul class="pps" id="pps"></ul>
-      <p class="small" style="margin:12px 0 0">Prices are full list prices (RRP), checked 15 November 2026. Most of these sell for less, especially around Black Friday, so check today's price before you buy.</p>
+      <div id="pp-more"></div>
+      <p class="small" style="margin:12px 0 0">Prices are the lowest we found from the brand or a major UK retailer on 16 November 2026. Black Friday prices change daily, so check today's price before you buy. <a href="power-stations/">Compare every model by price per kWh →</a></p>
     </div>
   </section>
 
@@ -521,27 +524,218 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 <script>
 /* ===== Edit these: paste your affiliate links in place of the shop links once you're approved. ===== */
 const LINKS = {
-  "jackery-1000plus-v2": "https://uk.jackery.com/pages/portable-power-stations",
+  "ecoflow-river3plus": "https://www.currys.co.uk/products/ecoflow-river-3-plus-286-wh-portable-power-station-10276058.html",
+  "bluetti-elite100v2": "https://shop-uk.bluettipower.com/collections/1-2kwh",
+  "jackery-1000v2": "https://uk.jackery.com/pages/portable-power-stations",
+  "dji-power1000v2": "https://www.currys.co.uk/products/dji-power-1000-v2-portable-power-station-10286491.html",
   "ecoflow-delta3plus": "https://www.currys.co.uk/products/ecoflow-delta-3-plus-1024-wh-portable-power-station-10302850.html",
+  "jackery-1000plus-v2": "https://uk.jackery.com/pages/portable-power-stations",
   "anker-c1000-gen2": "https://uk.ankersolix.com/products/c1000-gen2",
+  "jackery-2000v2": "https://uk.jackery.com/pages/portable-power-stations",
+  "bluetti-elite200v2": "https://shop-uk.bluettipower.com/collections/1-2kwh",
+  "ecoflow-delta2max": "https://pricespy.co.uk/s/ecoflow-power-station/",
+  "dji-power2000": "https://www.dji.com/uk/power-2000/specs",
+  "ecoflow-delta3max": "https://www.ecowizard.co.uk/portable-battery-power/ecoflow-delta-3-max-portable-pps-uk/",
   "jackery-2000plus-v2": "https://uk.jackery.com/pages/portable-power-stations",
-  "anker-c2000-gen2": "https://www.ankersolix.com/uk/c2000-gen2-boa",
+  "anker-c2000-gen2": "https://www.ankersolix.com/uk/c2000-gen2",
   "jackery-3000-v2": "https://uk.jackery.com/pages/portable-power-stations",
-  "anker-f3800": "https://www.ankersolix.com/uk/collections/portable-powerstation",
+  "anker-f3000": "https://www.ankersolix.com/uk/products/f3000",
+  "jackery-2000plus-v2-bp": "https://uk.jackery.com/pages/portable-power-stations",
   "ecoflow-deltapro3": "https://www.currys.co.uk/products/ecoflow-delta-pro-3-4096-wh-portable-power-station-10276064.html",
-  "jackery-2000plus-v2-bp": "https://uk.jackery.com/pages/portable-power-stations"
+  "anker-f3800": "https://www.ankersolix.com/uk/collections/portable-powerstation"
 };
 
 const PRODUCTS = [
-  { id: "jackery-1000plus-v2", brand: "Jackery", name: "Explorer 1000 Plus v2", wh: 1024, w: 1800, rrp: 749 },
-  { id: "ecoflow-delta3plus", brand: "EcoFlow", name: "DELTA 3 Plus", wh: 1024, w: 1800, rrp: 899 },
-  { id: "anker-c1000-gen2", brand: "Anker SOLIX", name: "C1000 Gen 2", wh: 1024, w: 2000, rrp: 999 },
-  { id: "jackery-2000plus-v2", brand: "Jackery", name: "Explorer 2000 Plus v2", wh: 2048, w: 2400, rrp: 1249 },
-  { id: "anker-c2000-gen2", brand: "Anker SOLIX", name: "C2000 Gen 2", wh: 2048, w: 2400, rrp: 1500 },
-  { id: "jackery-3000-v2", brand: "Jackery", name: "Explorer 3000 v2", wh: 3072, w: 3600, rrp: 2299 },
-  { id: "jackery-2000plus-v2-bp", brand: "Jackery", name: "Explorer 2000 Plus v2 + Battery Pack 2000", wh: 4096, w: 2400, rrp: 2098, bundle: true },
-  { id: "ecoflow-deltapro3", brand: "EcoFlow", name: "DELTA Pro 3", wh: 4096, w: 4000, rrp: 2799 },
-  { id: "anker-f3800", brand: "Anker SOLIX", name: "F3800", wh: 3840, w: 6000, rrp: 3699 }
+  {
+    "id": "ecoflow-river3plus",
+    "brand": "EcoFlow",
+    "name": "RIVER 3 Plus",
+    "wh": 286,
+    "w": 600,
+    "rrp": 219,
+    "where": "Ecowizard",
+    "bundle": false
+  },
+  {
+    "id": "bluetti-elite100v2",
+    "brand": "Bluetti",
+    "name": "Elite 100 V2",
+    "wh": 1024,
+    "w": 1800,
+    "rrp": 399,
+    "where": "Bluetti UK store",
+    "bundle": false
+  },
+  {
+    "id": "jackery-1000v2",
+    "brand": "Jackery",
+    "name": "Explorer 1000 v2",
+    "wh": 1070,
+    "w": 1500,
+    "rrp": 419,
+    "where": "Arnold Clark Autoparts",
+    "bundle": false
+  },
+  {
+    "id": "dji-power1000v2",
+    "brand": "DJI",
+    "name": "Power 1000 V2",
+    "wh": 1024,
+    "w": 2600,
+    "rrp": 579,
+    "where": "Heliguy",
+    "bundle": false
+  },
+  {
+    "id": "ecoflow-delta3plus",
+    "brand": "EcoFlow",
+    "name": "DELTA 3 Plus",
+    "wh": 1024,
+    "w": 1800,
+    "rrp": 599,
+    "where": "Amazon UK",
+    "bundle": false
+  },
+  {
+    "id": "jackery-1000plus-v2",
+    "brand": "Jackery",
+    "name": "Explorer 1000 Plus v2",
+    "wh": 1024,
+    "w": 1800,
+    "rrp": 749,
+    "where": "Jackery UK (list price)",
+    "bundle": false
+  },
+  {
+    "id": "anker-c1000-gen2",
+    "brand": "Anker SOLIX",
+    "name": "C1000 Gen 2",
+    "wh": 1024,
+    "w": 2000,
+    "rrp": 999,
+    "where": "Anker UK store",
+    "bundle": false
+  },
+  {
+    "id": "jackery-2000v2",
+    "brand": "Jackery",
+    "name": "Explorer 2000 v2",
+    "wh": 2042,
+    "w": 2200,
+    "rrp": 899,
+    "where": "Jackery UK store",
+    "bundle": false
+  },
+  {
+    "id": "bluetti-elite200v2",
+    "brand": "Bluetti",
+    "name": "Elite 200 V2",
+    "wh": 2074,
+    "w": 2600,
+    "rrp": 899,
+    "where": "Bluetti UK store",
+    "bundle": false
+  },
+  {
+    "id": "ecoflow-delta2max",
+    "brand": "EcoFlow",
+    "name": "DELTA 2 Max",
+    "wh": 2048,
+    "w": 2400,
+    "rrp": 949,
+    "where": "PriceSpy (lowest listed)",
+    "bundle": false
+  },
+  {
+    "id": "dji-power2000",
+    "brand": "DJI",
+    "name": "Power 2000",
+    "wh": 2048,
+    "w": 3000,
+    "rrp": 959,
+    "where": "Heliguy",
+    "bundle": false
+  },
+  {
+    "id": "ecoflow-delta3max",
+    "brand": "EcoFlow",
+    "name": "DELTA 3 Max",
+    "wh": 2048,
+    "w": 2400,
+    "rrp": 1199,
+    "where": "Ecowizard",
+    "bundle": false
+  },
+  {
+    "id": "jackery-2000plus-v2",
+    "brand": "Jackery",
+    "name": "Explorer 2000 Plus v2",
+    "wh": 2048,
+    "w": 2400,
+    "rrp": 1249,
+    "where": "Jackery UK (list price)",
+    "bundle": false
+  },
+  {
+    "id": "anker-c2000-gen2",
+    "brand": "Anker SOLIX",
+    "name": "C2000 Gen 2",
+    "wh": 2048,
+    "w": 2400,
+    "rrp": 1500,
+    "where": "Anker UK store",
+    "bundle": false
+  },
+  {
+    "id": "jackery-3000-v2",
+    "brand": "Jackery",
+    "name": "Explorer 3000 v2",
+    "wh": 3072,
+    "w": 3600,
+    "rrp": 1352,
+    "where": "Jackery UK (Black Friday price to 30 Nov)",
+    "bundle": false
+  },
+  {
+    "id": "anker-f3000",
+    "brand": "Anker SOLIX",
+    "name": "F3000",
+    "wh": 3072,
+    "w": 3600,
+    "rrp": 1799,
+    "where": "Ecowizard",
+    "bundle": false
+  },
+  {
+    "id": "jackery-2000plus-v2-bp",
+    "brand": "Jackery",
+    "name": "Explorer 2000 Plus v2 + Battery Pack 2000",
+    "wh": 4096,
+    "w": 2400,
+    "rrp": 2098,
+    "where": "Jackery UK (two list prices added)",
+    "bundle": true
+  },
+  {
+    "id": "ecoflow-deltapro3",
+    "brand": "EcoFlow",
+    "name": "DELTA Pro 3",
+    "wh": 4096,
+    "w": 4000,
+    "rrp": 2799,
+    "where": "Wickes",
+    "bundle": false
+  },
+  {
+    "id": "anker-f3800",
+    "brand": "Anker SOLIX",
+    "name": "F3800",
+    "wh": 3840,
+    "w": 6000,
+    "rrp": 3699,
+    "where": "Anker UK store",
+    "bundle": false
+  }
 ];
 
 /* Typical UK figures. whDay = energy per day; w = watts drawn while running.
@@ -612,7 +806,7 @@ function durationLabel(hours) { return DURATIONS.find(d => d.hours === hours).la
 function defaultState() {
   const sel = {};
   for (const a of APPLIANCES) sel[a.id] = { on: !!a.on, qty: a.qty || 1 };
-  return { sel, hours: 72 };
+  return { sel, hours: 72, showAll: false };
 }
 let state = defaultState();
 
@@ -712,8 +906,11 @@ function renderProducts(r) {
   const axisMax = target * 1.5;
   const step = target <= 12 ? 6 : 24;
   const sorted = [...r.products].sort((a, b) => (b.ok - a.ok) || (a.ok ? a.rrp - b.rrp : b.runtimeH - a.runtimeH));
+  let idx = 0;
   for (const p of sorted) {
     const li = document.createElement("li");
+    if (!state.showAll && idx >= 6) li.hidden = true;
+    idx++;
     li.className = "pp" + (r.best && r.best.id === p.id ? " best" : "");
     let chip, chipClass;
     if (r.dailyWh === 0) { chip = "—"; chipClass = "warn"; }
@@ -740,7 +937,7 @@ function renderProducts(r) {
     li.querySelector(".brandname").textContent = p.brand;
     li.querySelector(".pname").textContent = p.name;
     li.querySelector(".chip").textContent = chip;
-    li.querySelector(".spec").textContent = nf.format(p.wh) + " Wh · " + nf.format(p.w) + " W output · RRP £" + nf.format(p.rrp) + (p.bundle ? " (bundle)" : "");
+    li.querySelector(".spec").textContent = nf.format(p.wh) + " Wh · " + nf.format(p.w) + " W output · £" + nf.format(p.rrp) + (p.where ? " at " + p.where : "");
     const runtime = li.querySelector(".runtime");
     runtime.innerHTML = r.dailyWh === 0 ? "Tick something to see run time" : "Runs your selection for <b></b>";
     if (r.dailyWh > 0) runtime.querySelector("b").textContent = durationText(p.runtimeH);
@@ -749,6 +946,15 @@ function renderProducts(r) {
     const why = li.querySelector(".why");
     if (why) why.textContent = "Max " + nf.format(p.w) + " W, but you'd need " + nf.format(r.outputW) + " W" + (r.burstW > p.w ? " for the " + (r.burstW >= 3000 ? "kettle" : "microwave") : "") + ".";
     ul.append(li);
+  }
+  const more = document.getElementById("pp-more");
+  more.innerHTML = "";
+  if (sorted.length > 6) {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "show-all";
+    b.textContent = state.showAll ? "Show fewer" : "Show all " + sorted.length + " power stations";
+    b.addEventListener("click", () => { state.showAll = !state.showAll; renderProducts(calculate(state.sel, state.hours)); });
+    more.append(b);
   }
   document.getElementById("matches-sub").textContent =
     "Bars show how long each one would run everything you've ticked. The black line marks " + durationLabel(target) + ".";
