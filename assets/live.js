@@ -1,5 +1,6 @@
 /* Live power cuts from the network operators' open data.
-   UK Power Networks (CC BY 4.0) and Northern Powergrid (Northern Powergrid Open Data Licence v1.0). */
+   UK Power Networks (CC BY 4.0), Northern Powergrid (Northern Powergrid Open Data Licence v1.0)
+   and National Grid Electricity Distribution (NGED Open Data Licence). */
 (function () {
   "use strict";
   var UKPN = "https://ukpowernetworks.opendatasoft.com/api/explore/v2.1/catalog/datasets/ukpn-live-faults/exports/json?select=" +
@@ -8,11 +9,30 @@
   var NPG = "https://northernpowergrid.opendatasoft.com/api/explore/v2.1/catalog/datasets/live-power-cuts-data/exports/json?select=" +
     encodeURIComponent("reference,area,postcode,totalconfirmedpowercut,totalpredictedpowercut,loggedtime,estimatedtimetillresolution") +
     "&where=" + encodeURIComponent('natureofoutage != "Planned Work on System"');
+  // National Grid's portal doesn't send CORS headers, so this one is loaded as JSONP (CKAN supports ?callback=).
+  var NGED = "https://connecteddata.nationalgrid.co.uk/api/3/action/datastore_search?resource_id=292f788f-4339-455b-8cc0-153e14509d4d&limit=1000&filters=" +
+    encodeURIComponent(JSON.stringify({ Planned: "false" }));
   var REFRESH_MS = 3 * 60 * 1000;
+  var jsonpN = 0;
   var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function getJSON(url) {
     return fetch(url, { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); });
+  }
+  function getJSONP(url) {
+    return new Promise(function (resolve, reject) {
+      var cb = "__pcpLive" + (++jsonpN), s = document.createElement("script"), done = false;
+      function finish() {
+        done = true; clearTimeout(timer);
+        window[cb] = function () {};           // a late response then lands harmlessly
+        if (s.parentNode) s.parentNode.removeChild(s);
+      }
+      var timer = setTimeout(function () { if (!done) { finish(); reject(new Error("timeout")); } }, 15000);
+      window[cb] = function (d) { if (done) return; finish(); resolve(d); };
+      s.onerror = function () { if (done) return; finish(); reject(new Error("load")); };
+      s.src = url + "&callback=" + cb;
+      document.head.appendChild(s);
+    });
   }
   function title(s) {
     var t = String(s || "").toLowerCase().replace(/\bzone\b/g, "").trim();
@@ -33,7 +53,7 @@
   }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
-  function normalise(ukpn, npg) {
+  function normalise(ukpn, npg, nged) {
     var out = [];
     (ukpn || []).forEach(function (r) {
       var pcs = String(r.postcodesaffected || "").split(";").map(district).filter(Boolean);
@@ -55,6 +75,19 @@
       e.homes = Math.max(e.homes, homes);
     });
     Object.keys(byRef).forEach(function (k) { var e = byRef[k]; e.pc = e.pcs.slice(0, 2).join(", "); out.push(e); });
+    var ng = nged && nged.result && Array.isArray(nged.result.records) ? nged.result.records : [];
+    ng.forEach(function (r) {
+      if (String(r.Planned).toLowerCase() === "true") return;
+      if (/restor|complet|closed|resolved|cancel/i.test(r.Status || "")) return;
+      var pcs = String(r.Postcodes || "").split(/[,;]/).map(district).filter(Boolean);
+      var uniq = pcs.filter(function (p, i) { return pcs.indexOf(p) === i; });
+      out.push({
+        id: r["Incident ID"], place: r.Region || "", pc: uniq.slice(0, 2).join(", "),
+        homes: Math.max(Number(r["Confirmed Off"]) || 0, Number(r["Predicted Off"]) || 0),
+        since: parseTime(r["Start Time"]), etr: parseTime(r.ETR),
+        region: r.Region || "Midlands, South West & Wales", src: "National Grid"
+      });
+    });
     out.sort(function (a, b) { return (b.since ? b.since.getTime() : 0) - (a.since ? a.since.getTime() : 0); });
     return out;
   }
@@ -123,10 +156,11 @@
   function load() {
     Promise.all([
       getJSON(UKPN).catch(function () { return null; }),
-      getJSON(NPG).catch(function () { return null; })
+      getJSON(NPG).catch(function () { return null; }),
+      getJSONP(NGED).catch(function () { return null; })
     ]).then(function (res) {
-      if (!res[0] && !res[1]) { fail(); return; }
-      render(normalise(res[0], res[1]), new Date());
+      if (!res[0] && !res[1] && !res[2]) { fail(); return; }
+      render(normalise(res[0], res[1], res[2]), new Date());
     });
   }
 
