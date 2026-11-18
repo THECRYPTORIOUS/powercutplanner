@@ -459,5 +459,17 @@ table.fit td:last-child { min-width: 9.5em; }
 
 /* Amazon secondary links */
 .amz-link { display: inline-block; font-size: .82rem; color: var(--muted, #566672); text-decoration: underline; text-underline-offset: 3px; }
-.bestvalue .amz-link { margin-top: 8px; align-self: flex-start; }
-.bf-pick .amz-link { display: block; text-align: center; margin-top: 8px; }
+.alt-link { font-size: .82rem; color: var(--muted, #566672); text-decoration: underline; text-underline-offset: 3px; }
+.bestvalue .alt-link { margin-top: 8px; align-self: flex-start; color: #93A6B4; }
+.bf-pick .alt-link { display: block; text-align: center; margin-top: 8px; }
+.pc-where .alt-link { font-size: inherit; }
+
+/* Kit list */
+.article ul.kit { list-style: none; padding: 0; margin: 12px 0 24px; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+.article ul.kit > li.kit-item { margin: 0; padding: 14px 16px; border: 1px solid var(--line, #D2D9DF); border-radius: 12px; background: var(--surface, #fff); display: flex; flex-direction: column; }
+.article ul.kit > li.kit-item::before { content: none; }
+.kit-item h3 { margin: 0 0 6px; font-size: 1.05rem; }
+.kit-item p { margin: 0 0 8px; font-size: .92rem; }
+.kit-item .kit-look { color: var(--muted, #566672); font-size: .86rem; }
+.kit-amz { margin-top: auto; align-self: flex-start; font-weight: 600; font-size: .9rem; text-decoration: none; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line, #D2D9DF); color: inherit; }
+.kit-amz:hover { border-color: var(--lamp, #E39B12); }
