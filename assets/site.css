@@ -456,3 +456,8 @@ table.fit td:last-child { min-width: 9.5em; }
 .article ul.bf-picks { padding: 0; margin: 0 0 10px; list-style: none; }
 .article .bf-picks > li.bf-pick { margin: 0; padding: 14px 16px 16px; }
 .article .bf-picks > li.bf-pick::before { display: none; content: none; }
+
+/* Amazon secondary links */
+.amz-link { display: inline-block; font-size: .82rem; color: var(--muted, #566672); text-decoration: underline; text-underline-offset: 3px; }
+.bestvalue .amz-link { margin-top: 8px; align-self: flex-start; }
+.bf-pick .amz-link { display: block; text-align: center; margin-top: 8px; }
