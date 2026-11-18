@@ -1283,6 +1283,7 @@ function renderNotes(r) {
   } else {
     notes.push({ html: "<b>Keep the freezer shut.</b> A full freezer that stays closed usually keeps food frozen for around two days, so you can switch it off for stretches to save battery." });
   }
+  if (s.router.on) notes.push({ html: "<b>Will your Wi-Fi still work?</b> Only if your broadband does. Openreach full fibre (FTTP) has no powered kit in the street, so it often keeps working if you power the router. Fibre to the cabinet relies on the green street cabinet, which has a few hours of battery at most, and cable broadband usually drops straight away. If yours won't work, untick the router: it saves about 0.3 kWh a day." });
   if (r.ac) notes.push({ html: "<b>Switch the plug sockets off when you can.</b> A power station uses about " + IDLE_W + " W just keeping its plug sockets on. If you're only charging phones overnight, turn the AC output off and use the USB sockets." });
   if (s.campfridge.on) notes.push({ html: "<b>12 V camping fridges are very efficient.</b> Plug it into the 12 V car socket rather than a plug socket, and keep it somewhere cool. Pre-chill it before a power cut if you can." });
   notes.push({ html: "<b>Charge it before you need it.</b> Top the power station up every few months and before storms are forecast." });
