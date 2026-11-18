@@ -471,5 +471,5 @@ table.fit td:last-child { min-width: 9.5em; }
 .kit-item h3 { margin: 0 0 6px; font-size: 1.05rem; }
 .kit-item p { margin: 0 0 8px; font-size: .92rem; }
 .kit-item .kit-look { color: var(--muted, #566672); font-size: .86rem; }
-.kit-amz { margin-top: auto; align-self: flex-start; font-weight: 600; font-size: .9rem; text-decoration: none; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line, #D2D9DF); color: inherit; }
-.kit-amz:hover { border-color: var(--lamp, #E39B12); }
+.kit-amz { margin-top: auto; align-self: flex-start; font-weight: 700; font-size: .92rem; text-decoration: none; padding: 10px 16px; border-radius: 999px; background: #F5B641; color: #1A1200; }
+.kit-amz:hover { background: #FFD27A; }
