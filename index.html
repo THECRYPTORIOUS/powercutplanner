@@ -1347,7 +1347,7 @@ function renderNotes(r) {
   if (s.freezer.on && state.hours >= 24) {
     const fz = APPLIANCES.find(a => a.id === "freezer");
     const save = applianceWh(fz, s.freezer) * state.hours / 24 / USABLE;
-    notes.push({ html: "<b>Is the freezer worth powering?</b> A full freezer that stays shut usually keeps food frozen for about two days. Leaving yours unplugged would cut the battery you need by about " + kwh(save, 1) + ", so for a short power cut it can be cheaper to eat your way through it." });
+    notes.push({ html: "<b>Is the freezer worth powering?</b> A full freezer that stays shut usually keeps food frozen for about two days, but only about one if it's half empty, so fill the gaps with bottles of water now (a tip from a reader). Leaving yours unplugged would cut the battery you need by about " + kwh(save, 1) + ", so for a short power cut it can be cheaper to eat your way through it." });
   } else {
     notes.push({ html: "<b>Keep the freezer shut.</b> A full freezer that stays closed usually keeps food frozen for around two days, so you can switch it off for stretches to save battery." });
   }
