@@ -40,7 +40,7 @@
 <div class="sp-grid">
 <section class="sp-in" aria-label="Your household">
 <h2>Who's at home?</h2>
-<div class="sp-row"><div class="sp-lab"><b>Adults</b><span>and teenagers 13+</span></div><div class="sp-step" data-k="ad"><button type="button" data-d="-1" aria-label="One fewer adults">−</button><output>2</output><button type="button" data-d="1" aria-label="One more adults">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Children</b><span>aged 4 to 12</span></div><div class="sp-step" data-k="ch"><button type="button" data-d="-1" aria-label="One fewer children">−</button><output>0</output><button type="button" data-d="1" aria-label="One more children">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Toddlers</b><span>aged 1 to 3</span></div><div class="sp-step" data-k="td"><button type="button" data-d="-1" aria-label="One fewer toddlers">−</button><output>0</output><button type="button" data-d="1" aria-label="One more toddlers">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Babies</b><span>under 1</span></div><div class="sp-step" data-k="bb"><button type="button" data-d="-1" aria-label="One fewer babies">−</button><output>0</output><button type="button" data-d="1" aria-label="One more babies">+</button></div></div>
+<div class="sp-row"><div class="sp-lab"><b>Adults</b><span>and teenagers 13+</span></div><div class="sp-step" data-k="ad"><button type="button" data-d="-1" aria-label="One fewer adults">−</button><output>2</output><button type="button" data-d="1" aria-label="One more adults">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Children</b><span>aged 4 to 12</span></div><div class="sp-step" data-k="ch"><button type="button" data-d="-1" aria-label="One fewer children">−</button><output>0</output><button type="button" data-d="1" aria-label="One more children">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Toddlers</b><span>aged 1 to 3</span></div><div class="sp-step" data-k="td"><button type="button" data-d="-1" aria-label="One fewer toddlers">−</button><output>0</output><button type="button" data-d="1" aria-label="One more toddlers">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Babies</b><span>under 6 months</span></div><div class="sp-step" data-k="bb"><button type="button" data-d="-1" aria-label="One fewer babies">−</button><output>0</output><button type="button" data-d="1" aria-label="One more babies">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Older babies</b><span>6 to 12 months, weaning</span></div><div class="sp-step" data-k="bw"><button type="button" data-d="-1" aria-label="One fewer older babies">−</button><output>0</output><button type="button" data-d="1" aria-label="One more older babies">+</button></div></div>
 <details class="sp-pets"><summary>Add pets</summary><div class="sp-row"><div class="sp-lab"><b>Small dogs</b><span>about 10 kg</span></div><div class="sp-step" data-k="ds"><button type="button" data-d="-1" aria-label="One fewer small dogs">−</button><output>0</output><button type="button" data-d="1" aria-label="One more small dogs">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Medium dogs</b><span>about 20 kg</span></div><div class="sp-step" data-k="dm"><button type="button" data-d="-1" aria-label="One fewer medium dogs">−</button><output>0</output><button type="button" data-d="1" aria-label="One more medium dogs">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Large dogs</b><span>about 35 kg</span></div><div class="sp-step" data-k="dl"><button type="button" data-d="-1" aria-label="One fewer large dogs">−</button><output>0</output><button type="button" data-d="1" aria-label="One more large dogs">+</button></div></div><div class="sp-row"><div class="sp-lab"><b>Cats</b><span>about 4 kg</span></div><div class="sp-step" data-k="ct"><button type="button" data-d="-1" aria-label="One fewer cats">−</button><output>0</output><button type="button" data-d="1" aria-label="One more cats">+</button></div></div></details>
 <h2>How long for?</h2>
 <div class="seg" data-k="days" role="group"><button type="button" data-v="3">3 days</button><button type="button" data-v="7">1 week</button><button type="button" data-v="14">2 weeks</button></div>
@@ -77,7 +77,7 @@
 <ul>
 <li><b>Water:</b> the government's Be Ready checklist says 3 litres of drinking water per person per day. Its Prepare advice says <b>10 litres per person per day</b> is more comfortable, because it also covers basic cooking and hygiene. Babies count as a person here, to cover washing and making up feeds.</li>
 <li><b>Pets:</b> dogs and cats usually drink about 40 to 60 ml per kg of body weight a day. We use 60 ml to be safe, so a 20 kg dog needs about 1.2 litres a day.</li>
-<li><b>Food:</b> rough daily needs of about 2,250 calories for adults and teenagers, 1,600 for children aged 4 to 12 and 1,000 for toddlers, based on NHS and SACN guidance. Babies are fed milk, so they're not counted.</li>
+<li><b>Food:</b> rough daily needs of about 2,250 calories for adults and teenagers, 1,600 for children aged 4 to 12 and 1,000 for toddlers, based on NHS and SACN guidance. Babies under 6 months are on milk only, so they're not counted. Weaning babies (6 to 12 months) get about 250 calories a day from food on top of their milk, between the WHO and UNICEF guide figures of about 200 at 6 to 8 months and 300 at 9 to 11 months.</li>
 </ul>
 
 <h2>Tips that make a stockpile actually work</h2>
@@ -108,9 +108,9 @@
 </article>
 <script>
 (function () {
-  var KCAL = {ad: 2250, ch: 1600, td: 1000, bb: 0};
+  var KCAL = {ad: 2250, ch: 1600, td: 1000, bb: 0, bw: 250};
   var PET_L = {ds: 0.6, dm: 1.2, dl: 2.1, ct: 0.25};
-  var st = {ad: 2, ch: 0, td: 0, bb: 0, ds: 0, dm: 0, dl: 0, ct: 0, days: 3, lvl: 3};
+  var st = {ad: 2, ch: 0, td: 0, bb: 0, bw: 0, ds: 0, dm: 0, dl: 0, ct: 0, days: 3, lvl: 3};
   var q = new URLSearchParams(location.search);
   Object.keys(st).forEach(function (k) { if (q.has(k)) { var v = parseInt(q.get(k), 10); if (!isNaN(v)) st[k] = Math.max(0, Math.min(k === "days" ? 14 : k === "lvl" ? 10 : 20, v)); } });
   if ([3, 7, 14].indexOf(st.days) < 0) st.days = 3;
@@ -137,10 +137,10 @@
   }
   function drawVis(items, five, people, d) {
     var fam = "", add = function (n, e, cls) { for (var i = 0; i < n; i++) fam += '<span class="' + (cls || "") + '">' + e + "</span>"; };
-    add(st.ad, "🧑"); add(st.ch, "🧒", "sm"); add(st.td, "👶", "sm"); add(st.bb, "🍼", "sm"); add(st.ds + st.dm + st.dl, "🐕", "sm"); add(st.ct, "🐈", "sm");
+    add(st.ad, "🧑"); add(st.ch, "🧒", "sm"); add(st.td, "👶", "sm"); add(st.bb + st.bw, "🍼", "sm"); add(st.ds + st.dm + st.dl, "🐕", "sm"); add(st.ct, "🐈", "sm");
     document.getElementById("spFam").innerHTML = fam || '<span class="sp-empty">Add your household</span>';
     var get = function (k) { var it = items.filter(function (x) { return x[1].indexOf(k) === 0; })[0]; return it ? it[0] : 0; };
-    var tins = get("ring-pull"), bars = get("cereal"), packs = get("pack of crackers") + get("pack of biscuits"), jars = get("jar"), bags = get("bag"), milk = get("litre of long-life");
+    var tins = get("ring-pull") + get("tin of rice"), bars = get("cereal"), packs = get("pack of crackers") + get("pack of biscuits"), jars = get("jar"), bags = get("bag"), milk = get("litre of long-life");
     var top = [];
     for (var i = 0; i < jars; i++) top.push(SVG.jar);
     for (i = 0; i < packs; i++) top.push(SVG.box(BOX_C[i % BOX_C.length]));
@@ -160,7 +160,7 @@
     document.querySelectorAll(".sp-step").forEach(function (el) { el.querySelector("output").textContent = st[el.dataset.k]; });
     document.querySelectorAll('.seg[data-k="days"] button').forEach(function (b) { b.setAttribute("aria-pressed", String(+b.dataset.v === st.days)); });
     document.querySelectorAll('.seg[data-k="lvl"] button').forEach(function (b) { b.setAttribute("aria-pressed", String(+b.dataset.v === st.lvl)); });
-    var people = st.ad + st.ch + st.td + st.bb, d = st.days;
+    var people = st.ad + st.ch + st.td + st.bb + st.bw, d = st.days;
     var petL = (st.ds * PET_L.ds + st.dm * PET_L.dm + st.dl * PET_L.dl + st.ct * PET_L.ct) * d;
     var peopleL = people * st.lvl * d, water = Math.ceil(peopleL + petL);
     document.getElementById("spWater").textContent = fmt(water);
@@ -170,22 +170,24 @@
     sub += water ? ". That's about " + five + " × 5-litre bottles." : "";
     if (st.lvl === 3 && people) sub += " For cooking and washing too, aim for " + fmt(people * 10 * d + petL) + " litres.";
     document.getElementById("spWaterSub").textContent = sub;
-    var kcalDay = st.ad * KCAL.ad + st.ch * KCAL.ch + st.td * KCAL.td, kcal = kcalDay * d;
+    var kcalDay = st.ad * KCAL.ad + st.ch * KCAL.ch + st.td * KCAL.td + st.bw * KCAL.bw, kcal = kcalDay * d;
     document.getElementById("spKcal").textContent = fmt(kcal);
-    var aed = kcal / 2250;
-    document.getElementById("spFoodSub").textContent = kcal ? "About " + fmt(kcalDay) + " calories a day for " + plural(st.ad + st.ch + st.td, "person", "people") + " (babies drink milk, so they're not counted)." : "";
+    var aed = (kcal - st.bw * KCAL.bw * d) / 2250;  // weaning babies are covered by baby food, not the family list
+    document.getElementById("spFoodSub").textContent = kcal ? "About " + fmt(kcalDay) + " calories a day for " + plural(st.ad + st.ch + st.td + st.bw, "person", "people") + (st.bb ? " (babies under 6 months are on milk only, so they're not counted)." : ".") : "";
     var items = [];
     if (aed > 0) {
       items.push([Math.ceil(aed * 2), "ring-pull tin", "ring-pull tins", " you can eat cold (beans, soup, ready meals, fish)"]);
-      items.push([Math.ceil(aed * 3), "cereal or breakfast bar", "cereal or breakfast bars", ""]);
-      items.push([Math.ceil(aed / 6), "pack of crackers or oatcakes", "packs of crackers or oatcakes", ""]);
+      items.push([Math.ceil(aed), "cereal or breakfast bar", "cereal or breakfast bars", ""]);
+      items.push([Math.ceil(aed / 4), "pack of crackers or oatcakes", "packs of crackers or oatcakes", ""]);
       items.push([Math.ceil(aed / 7), "jar of peanut or nut butter", "jars of peanut or nut butter", " (or another spread if anyone has an allergy)"]);
       items.push([Math.ceil(aed / 4), "bag of nuts or dried fruit", "bags of nuts or dried fruit", " (about 200 g each)"]);
+      items.push([Math.ceil(aed / 2), "tin of rice pudding or custard", "tins of rice pudding or custard", " (ring-pull, eat cold)"]);
       items.push([Math.ceil(aed / 5), "litre of long-life (UHT) milk or juice", "litres of long-life (UHT) milk or juice", ""]);
       items.push([Math.ceil(aed / 5), "pack of biscuits or chocolate", "packs of biscuits or chocolate", ""]);
       items.push([1, "manual tin opener", "manual tin openers", ""]);
     }
-    if (st.bb) items.push([st.bb * d * 6, "nappy", "nappies", " (about 6 a baby a day), plus wipes and ready-to-feed formula if you use it"]);
+    if (st.bw) items.push([st.bw * d * 3, "baby food pouch or jar", "baby food pouches or jars", " (about 3 a day for a weaning baby, on top of their milk)"]);
+    if (st.bb + st.bw) items.push([(st.bb + st.bw) * d * 6, "nappy", "nappies", " (about 6 a baby a day), plus wipes and ready-to-feed formula if you use it"]);
     var dogs = st.ds + st.dm + st.dl;
     if (dogs || st.ct) items.push([d + 2, "day of pet food", "days of pet food", " (their usual food, plus 2 spare days)"]);
     items.push([people ? Math.ceil(people * d / 3) : 0, "toilet roll", "toilet rolls", ", plus wet wipes, hand sanitiser and bin bags"]);
