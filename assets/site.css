@@ -522,3 +522,4 @@ table.fit td:last-child { min-width: 9.5em; }
 .sp-days span.on { color: #0D1820; background: var(--meter-ink); }
 .sp-days.many span { font-size: .62rem; }
 @media (prefers-reduced-motion: reduce) { .sp-new { animation: none; } }
+.alt-note { display: block; font-size: .82rem; color: var(--muted, #566672); text-align: center; margin-top: 8px; }
