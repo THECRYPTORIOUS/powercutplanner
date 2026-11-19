@@ -1,6 +1,27 @@
 {
-  "updated": "2026-11-16",
+  "updated": "2026-11-19",
   "items": [
+    {
+      "date": "2026-11-17",
+      "title": "National Grid says a viral 19 November blackout warning is fake",
+      "summary": "A mocked-up post claiming parts of the UK would lose power from 4pm on Thursday 19 November was shared tens of thousands of times. National Grid says no outage is expected and asks people to report the post and rely on official channels.",
+      "source": "Full Fact",
+      "url": "https://fullfact.org/hoaxes/national-grid-warning-major-UK-blackout-outage-fake/"
+    },
+    {
+      "date": "2026-11-17",
+      "title": "Cable faults cut power to homes across Lancashire and Greater Manchester",
+      "summary": "SP Electricity North West said underground cable faults caused outages on Tuesday morning in places including Saddleworth, Irlam, Blackpool and the Ribble Valley, with up to about 280 homes off in each area. A snow warning was in force at the time.",
+      "source": "BBC News via AOL",
+      "url": "https://www.aol.com/articles/hundreds-properties-hit-power-cuts-084658000.html"
+    },
+    {
+      "date": "2026-11-16",
+      "title": "Lords committee warns the UK is badly prepared for emergencies",
+      "summary": "The National Resilience Committee says limited stockpiles leave Britain exposed to cyberattacks and extreme weather, and warned a cyberattack could quickly turn into a power cut. It wants a Cabinet minister just for resilience and welcomed the Be Ready campaign.",
+      "source": "ITV News",
+      "url": "https://www.itv.com/news/2026-11-16/uk-seriously-underprepared-for-emergencies-and-threats-peers-warn"
+    },
     {
       "date": "2026-11-10",
       "title": "BBC reveals its emergency radio plan for a national blackout",
@@ -16,39 +37,11 @@
       "url": "https://www.bloomberg.com/news/articles/2026-11-08/low-wind-triggers-uk-power-grid-margin-warning-for-monday"
     },
     {
-      "date": "2026-11-07",
-      "title": "1,200 homes lose power after a lorry hits a power line in North Devon",
-      "summary": "A lorry's crane struck an 11kV overhead line near the A361 at Ashford and caught fire. National Grid restored all 1,205 properties by about 9pm.",
-      "source": "BBC via Yahoo News",
-      "url": "https://www.yahoo.com/news/weather-news/articles/power-cut-affects-1-000-122956375.html"
-    },
-    {
-      "date": "2026-11-03",
-      "title": "Economist questions whether the lights will stay on this winter",
-      "summary": "Oxford professor Sir Dieter Helm says relying on wind leaves Britain exposed in winter and calls for more backup power and storage. NESO says supplies will be secure.",
-      "source": "GB News",
-      "url": "https://www.gbnews.com/news/energy-expert-warning-britain-power-supply-winter"
-    },
-    {
       "date": "2026-10-25",
       "title": "Storm Boelo leaves 90,000 homes without power",
       "summary": "Around 160,000 homes lost power at the peak and two men were killed by falling trees. About 90,000 were still off supply that evening.",
       "source": "LBC",
       "url": "https://www.lbc.co.uk/article/two-killed-falling-tress-strong-winds-batter-uk-storm-boelo-5HjdkRM_2"
-    },
-    {
-      "date": "2026-10-23",
-      "title": "Storm Austen cuts power to 16,000 homes in the South West",
-      "summary": "Dozens of schools in Cornwall opened late or stayed shut. National Grid said it had restored more than 12,000 properties by 8am on the Friday.",
-      "source": "AOL",
-      "url": "https://www.aol.co.uk/articles/thousands-homes-without-power-storm-113225000.html"
-    },
-    {
-      "date": "2026-10-23",
-      "title": "Winter blackout risk rises for the first time since 2022",
-      "summary": "NESO's winter outlook puts Britain's spare margin at 5.9GW, down from 6.1GW last year, though it still expects supplies to stay secure.",
-      "source": "The Telegraph via Yahoo News",
-      "url": "https://www.yahoo.com/news/world/articles/winter-blackout-risk-rises-first-050000248.html"
     }
   ]
 }
