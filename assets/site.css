@@ -523,3 +523,10 @@ table.fit td:last-child { min-width: 9.5em; }
 .sp-days.many span { font-size: .62rem; }
 @media (prefers-reduced-motion: reduce) { .sp-new { animation: none; } }
 .alt-note { display: block; font-size: .82rem; color: var(--muted, #566672); text-align: center; margin-top: 8px; }
+/* stockpile calculator: use the full width on desktop */
+@media (min-width: 1120px) {
+  .article.sp { max-width: 1096px; }
+  .sp-grid { grid-template-columns: 360px 1fr; gap: 22px; }
+  .sp-out { display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; align-items: start; padding: 22px; }
+  .sp-col-b h3 { margin-top: 2px; }
+}
