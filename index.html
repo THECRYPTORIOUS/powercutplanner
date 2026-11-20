@@ -230,7 +230,7 @@ h2 {
 }
 .meter .big small { font-size: .38em; margin-left: 6px; color: var(--meter-dim); text-shadow: none; letter-spacing: .04em; }
 .meter .explain { color: #C9D5DD; font-size: .92rem; margin: 0 0 12px; max-width: 52ch; }
-.meter dl { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin: 0; border-top: 1px solid var(--meter-line); padding-top: 12px; }
+.meter dl { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin: 0; border-top: 1px solid var(--meter-line); padding-top: 12px; }
 .meter dt { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; }
 .meter dd { margin: 2px 0 0; font-family: var(--mono); color: #E9EEF1; font-size: .95rem; font-variant-numeric: tabular-nums; }
 .meter .fit { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--meter-line); color: #E9EEF1; font-size: .95rem; }
@@ -497,8 +497,11 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   padding: 10px 18px; display: flex; justify-content: space-between; align-items: center; gap: 12px;
   transform: translateY(0); transition: transform .2s ease;
 }
-.dock .d-num { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--meter-ink); line-height: 1; }
-.dock .d-txt { font-size: .82rem; color: var(--meter-dim); line-height: 1.25; }
+.dock .d-num { font-family: var(--display); font-weight: 700; font-size: 1.5rem; color: var(--meter-ink); line-height: 1; transition: color .25s ease; }
+.dock .d-num small { font-family: var(--body, inherit); font-weight: 500; font-size: .82rem; color: var(--meter-dim); margin-left: 4px; }
+.dock .d-num.flash { color: #fff; }
+.dock .d-txt { font-size: .82rem; color: var(--meter-dim); line-height: 1.3; margin-top: 3px; }
+.dock .d-txt b { color: #E9EEF1; font-weight: 600; }
 .dock a { color: #1A1200; background: var(--meter-ink); text-decoration: none; font-weight: 600; font-size: .85rem; padding: 8px 12px; border-radius: 8px; white-space: nowrap; }
 .dock.hide { transform: translateY(110%); }
 @media (min-width: 920px) { .dock { display: none; } footer.wrap { padding-bottom: 28px; } }
@@ -589,6 +592,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
         <dl>
           <div><dt>Per day</dt><dd id="m-day">1.14 kWh</dd></div>
           <div><dt>Output needed</dt><dd id="m-watts">226 W</dd></div>
+          <div><dt>Start-up peak</dt><dd id="m-peak">~830 W</dd></div>
           <div><dt>Covers it</dt><dd id="m-count">1 of 20</dd></div>
         </dl>
         <div class="sim" id="sim">
@@ -760,8 +764,8 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 
 <div class="dock" id="dock" aria-hidden="true">
   <div>
-    <div class="d-num" id="d-num">5.3 kWh</div>
-    <div class="d-txt" id="d-txt">needed for 3 days</div>
+    <div class="d-num" id="d-num">5.3 kWh<small>for 3 days</small></div>
+    <div class="d-txt" id="d-txt">Draws <b>226 W</b> · 1 kWh lasts <b>14 hours</b></div>
   </div>
   <a href="#meter" id="dock-play" tabindex="-1">▶ Watch it</a>
 </div>
@@ -821,6 +825,7 @@ const PRODUCTS = [
     "name": "RIVER 3 Plus",
     "wh": 286,
     "w": 600,
+    "surge": 1200,
     "rrp": 199,
     "where": "PriceSpy (lowest listed)",
     "bundle": false
@@ -831,6 +836,7 @@ const PRODUCTS = [
     "name": "Elite 100 V2",
     "wh": 1024,
     "w": 1800,
+    "surge": null,
     "rrp": 599,
     "where": "Bluetti UK store",
     "bundle": false
@@ -841,6 +847,7 @@ const PRODUCTS = [
     "name": "Explorer 1000 v2",
     "wh": 1070,
     "w": 1500,
+    "surge": null,
     "rrp": 378,
     "where": "Jackery UK store",
     "bundle": false
@@ -851,6 +858,7 @@ const PRODUCTS = [
     "name": "Power 1000 V2",
     "wh": 1024,
     "w": 2600,
+    "surge": null,
     "rrp": 579,
     "where": "DJI Store",
     "bundle": false
@@ -861,6 +869,7 @@ const PRODUCTS = [
     "name": "DELTA 3 Plus",
     "wh": 1024,
     "w": 1800,
+    "surge": null,
     "rrp": 699,
     "where": "PriceSpy (lowest listed)",
     "bundle": false
@@ -871,6 +880,7 @@ const PRODUCTS = [
     "name": "Explorer 1000 Plus v2",
     "wh": 1024,
     "w": 1800,
+    "surge": null,
     "rrp": 749,
     "where": "Jackery UK store",
     "bundle": false
@@ -881,6 +891,7 @@ const PRODUCTS = [
     "name": "C1000 Gen 2",
     "wh": 1024,
     "w": 2000,
+    "surge": null,
     "rrp": 999,
     "where": "Anker UK store (sold out when we checked; ships from 19 December)",
     "bundle": false
@@ -891,6 +902,7 @@ const PRODUCTS = [
     "name": "Explorer 2000 v2",
     "wh": 2042,
     "w": 2200,
+    "surge": null,
     "rrp": 807,
     "where": "Jackery UK store (sold out when we checked)",
     "bundle": false
@@ -901,6 +913,7 @@ const PRODUCTS = [
     "name": "Elite 200 V2",
     "wh": 2074,
     "w": 2600,
+    "surge": null,
     "rrp": 899,
     "where": "Bluetti UK store",
     "bundle": false
@@ -911,6 +924,7 @@ const PRODUCTS = [
     "name": "DELTA 2 Max",
     "wh": 2048,
     "w": 2400,
+    "surge": null,
     "rrp": 1199,
     "where": "PriceSpy (lowest listed)",
     "bundle": false
@@ -921,6 +935,7 @@ const PRODUCTS = [
     "name": "Power 2000",
     "wh": 2048,
     "w": 3000,
+    "surge": null,
     "rrp": 959,
     "where": "DJI Store",
     "bundle": false
@@ -931,6 +946,7 @@ const PRODUCTS = [
     "name": "DELTA 3 Max",
     "wh": 2048,
     "w": 2400,
+    "surge": null,
     "rrp": 999,
     "where": "PriceSpy (lowest listed)",
     "bundle": false
@@ -941,6 +957,7 @@ const PRODUCTS = [
     "name": "Explorer 2000 Plus v2",
     "wh": 2048,
     "w": 2400,
+    "surge": null,
     "rrp": 1249,
     "where": "Jackery UK store",
     "bundle": false
@@ -951,6 +968,7 @@ const PRODUCTS = [
     "name": "C2000 Gen 2",
     "wh": 2048,
     "w": 2400,
+    "surge": null,
     "rrp": 1499.99,
     "where": "Anker UK store",
     "bundle": false
@@ -961,6 +979,7 @@ const PRODUCTS = [
     "name": "Explorer 3000 v2",
     "wh": 3072,
     "w": 3600,
+    "surge": null,
     "rrp": 1499,
     "where": "Jackery UK store",
     "bundle": false
@@ -971,6 +990,7 @@ const PRODUCTS = [
     "name": "F3000",
     "wh": 3072,
     "w": 3600,
+    "surge": null,
     "rrp": 1799,
     "where": "Ecowizard",
     "bundle": false
@@ -981,6 +1001,7 @@ const PRODUCTS = [
     "name": "Explorer 2000 Plus v2 + Battery Pack 2000",
     "wh": 4096,
     "w": 2400,
+    "surge": null,
     "rrp": 2098,
     "where": "Jackery UK store (bundle)",
     "bundle": true
@@ -991,6 +1012,7 @@ const PRODUCTS = [
     "name": "Explorer 2000 Plus v2 + 2 Battery Pack 2000",
     "wh": 6144,
     "w": 2400,
+    "surge": null,
     "rrp": 2947,
     "where": "Jackery UK store (bundle)",
     "bundle": true
@@ -1001,6 +1023,7 @@ const PRODUCTS = [
     "name": "DELTA Pro 3",
     "wh": 4096,
     "w": 4000,
+    "surge": null,
     "rrp": 2799,
     "where": "Wickes",
     "bundle": false
@@ -1011,6 +1034,7 @@ const PRODUCTS = [
     "name": "F3800",
     "wh": 3840,
     "w": 6000,
+    "surge": null,
     "rrp": 3699,
     "where": "Anker UK store (sold out when we checked)",
     "bundle": false
@@ -1025,13 +1049,13 @@ const DETAIL_URL = "power-stations/";
    dc = runs from the USB or 12 V sockets, so it doesn't need the inverter (plug sockets) on.
    label = can take the kWh a year from its energy label. */
 const APPLIANCES = [
-  { id: "fridgefreezer", name: "Fridge-freezer", detail: "Cycles on and off all day", whDay: 700, w: 150, on: true, room: "kitchen", label: true },
+  { id: "fridgefreezer", name: "Fridge-freezer", detail: "Cycles on and off all day", whDay: 700, w: 150, on: true, room: "kitchen", label: true, comp: true },
   { id: "router", name: "Wi-Fi router", detail: "Router and fibre box, about 12 W, on all day", whDay: 288, w: 12, on: true, room: "study" },
   { id: "lights", name: "LED lamps", detail: "8 W each, 5 hours an evening", whEach: 40, w: 8, qty: 3, on: true, room: "living" },
   { id: "phones", name: "Phone charges", detail: "One full charge each a day, from the USB sockets", whEach: 15, w: 20, qty: 2, on: true, room: "bed", dc: true },
   { id: "boiler", name: "Gas or oil boiler", detail: "Controls and pump, about 100 W, heating on 6 hours. Oil burners use a bit more while firing", whDay: 600, w: 100, room: "kitchen" },
-  { id: "fridge", name: "Fridge", detail: "Separate fridge, no freezer compartment", whDay: 350, w: 100, room: "kitchen", label: true },
-  { id: "freezer", name: "Freezer", detail: "Separate chest or upright freezer", whDay: 500, w: 100, room: "kitchen", label: true },
+  { id: "fridge", name: "Fridge", detail: "Separate fridge, no freezer compartment", whDay: 350, w: 100, room: "kitchen", label: true, comp: true },
+  { id: "freezer", name: "Freezer", detail: "Separate chest or upright freezer", whDay: 500, w: 100, room: "kitchen", label: true, comp: true },
   { id: "campfridge", name: "12 V camping fridge", detail: "Compressor cool box on the 12 V socket, about 250 Wh a day in mild weather, less in a cold room", whDay: 250, w: 45, room: "kitchen", dc: true },
   { id: "laptop", name: "Laptop", detail: "50 W, 4 hours", whDay: 200, w: 50, room: "study" },
   { id: "tv", name: "TV", detail: "70 W, 4 hours", whDay: 280, w: 70, room: "living" },
@@ -1087,6 +1111,10 @@ const USABLE = 0.85;
 /* The power station's own draw while its plug sockets (the inverter) are switched on.
    Bluetti quotes about 15 W for the Elite 200 V2; Anker says 15 to 20 W is typical for 2 kWh units. */
 const IDLE_W = 15;
+/* When a fridge or freezer compressor starts, it draws several times its running power for about a second.
+   The usual rule of thumb is 3 to 5 times; we allow 5 times, then check it against the power station's
+   surge (peak) rating, or its continuous rating if we don't have a surge figure. */
+const START_X = 5;
 
 /* Energy a day for one appliance, using the energy label figure if the user typed one in. */
 function applianceWh(a, s) {
@@ -1096,7 +1124,7 @@ function applianceWh(a, s) {
 
 /* ---------- Pure maths ---------- */
 function calculate(selection, hours) {
-  let dailyWh = 0, steadyW = 0, burstW = 0, burstName = "", ac = false;
+  let dailyWh = 0, steadyW = 0, burstW = 0, burstName = "", ac = false, compW = 0, compName = "";
   for (const a of APPLIANCES) {
     const s = selection[a.id];
     if (!s || !s.on) continue;
@@ -1104,21 +1132,25 @@ function calculate(selection, hours) {
     if (n <= 0) continue;
     dailyWh += applianceWh(a, s);
     if (!a.dc) ac = true;
+    if (a.comp && a.w > compW) { compW = a.w; compName = a.name.toLowerCase(); }
     if (a.burst) { if (a.w > burstW) { burstW = a.w; burstName = a.name.toLowerCase(); } }
     else steadyW += a.w * n;
   }
   const idleWh = ac && dailyWh > 0 ? IDLE_W * 24 : 0;
   const totalWh = dailyWh + idleWh;
   const outputW = steadyW + burstW;
+  const startW = compW ? outputW + compW * (START_X - 1) : outputW;
   const neededWh = totalWh * (hours / 24) / USABLE;
   const products = PRODUCTS.map(p => {
     const runtimeH = totalWh > 0 ? (p.wh * USABLE) / (totalWh / 24) : Infinity;
-    const powerOk = p.w >= outputW;
+    const steadyOk = p.w >= outputW;
+    const startOk = (p.surge || p.w) >= startW;
+    const powerOk = steadyOk && startOk;
     const lastsOk = runtimeH >= hours;
-    return { ...p, runtimeH, powerOk, lastsOk, ok: powerOk && lastsOk };
+    return { ...p, runtimeH, steadyOk, startOk, powerOk, lastsOk, ok: powerOk && lastsOk };
   });
   const fits = products.filter(p => p.ok).sort((a, b) => a.rrp - b.rrp);
-  return { dailyWh, idleWh, totalWh, ac, outputW, burstW, burstName, neededWh, products, best: fits[0] || null, okCount: fits.length };
+  return { dailyWh, idleWh, totalWh, ac, outputW, startW, compW, compName, burstW, burstName, neededWh, products, best: fits[0] || null, okCount: fits.length };
 }
 
 /* ---------- Formatting ---------- */
@@ -1238,6 +1270,7 @@ function update() {
   animateBig(r.neededWh);
   document.getElementById("m-day").textContent = r.dailyWh >= 1000 ? kwh(r.dailyWh, 2) : nf.format(r.dailyWh) + " Wh";
   document.getElementById("m-watts").textContent = nf.format(r.outputW) + " W";
+  document.getElementById("m-peak").textContent = r.compW ? "~" + nf.format(Math.round(r.startW / 10) * 10) + " W" : "None";
   document.getElementById("m-count").textContent = r.okCount + " of " + PRODUCTS.length;
 
   const explain = document.getElementById("m-explain");
@@ -1247,8 +1280,16 @@ function update() {
       (r.idleWh ? "We add about " + kwh(r.idleWh, 2) + " a day for the power station's own sockets, plus 15% for conversion losses." : "It all runs from the USB and 12 V sockets, so we only add 15% for conversion losses.");
   renderLabels();
 
-  document.getElementById("d-num").textContent = big.n + " " + big.u;
-  document.getElementById("d-txt").textContent = "needed for " + dl + (r.best ? " · " + r.okCount + " match" + (r.okCount === 1 ? "" : "es") : "");
+  const dNum = document.getElementById("d-num"), dTxt = document.getElementById("d-txt");
+  const newNum = big.n + " " + big.u;
+  if (dNum.dataset.v && dNum.dataset.v !== newNum) { dNum.classList.add("flash"); clearTimeout(dNum._t); dNum._t = setTimeout(() => dNum.classList.remove("flash"), 350); }
+  dNum.dataset.v = newNum;
+  dNum.innerHTML = escapeHtml(newNum) + "<small>for " + escapeHtml(dl) + "</small>";
+  if (r.dailyWh === 0) dTxt.textContent = "Tick what you'd keep running";
+  else {
+    const oneKwhH = (1000 * USABLE) / (r.totalWh / 24);
+    dTxt.innerHTML = "Draws <b>" + nf.format(r.outputW) + " W</b> · 1 kWh lasts <b>" + (oneKwhH > 240 ? "10+ days" : hoursShort(oneKwhH)) + "</b>";
+  }
 
   renderProducts(r);
   renderNotes(r);
@@ -1312,7 +1353,9 @@ function renderProducts(r) {
     const det = li.querySelector(".details");
     if (DETAIL_URL) det.href = DETAIL_URL + "#" + p.id; else det.remove();
     const why = li.querySelector(".why");
-    if (why) why.textContent = "Max " + nf.format(p.w) + " W, but you'd need " + nf.format(r.outputW) + " W" + (r.burstW > p.w ? " for the " + r.burstName : "") + ".";
+    if (why) why.textContent = !p.steadyOk
+      ? "Max " + nf.format(p.w) + " W, but you'd need " + nf.format(r.outputW) + " W" + (r.burstW > p.w ? " for the " + r.burstName : "") + "."
+      : "Peaks at " + nf.format(p.surge || p.w) + " W, but your " + r.compName + " can need about " + nf.format(r.startW) + " W for a second when it starts.";
     ul.append(li);
   }
   const more = document.getElementById("pp-more");
@@ -1336,6 +1379,7 @@ function renderNotes(r) {
   if (s.oxygen.on) notes.push({ alert: true, html: "<b>On home oxygen? Your backup cylinder comes first.</b> Your oxygen supplier gives you a cylinder for power cuts. Know where it is and how to connect it, and call your supplier's 24-hour line if the power is off for long. A concentrator needs about 8 kWh a day, more than most power stations here hold, so treat one as a way to stretch your cylinder, not replace it." });
   if (s.cpap.on || s.oxygen.on) notes.push({ alert: true, html: '<b>Rely on medical equipment?</b> Join the free <a href="https://www.thepsr.co.uk/">Priority Services Register</a> with your energy supplier and network operator, so they know to prioritise you in a power cut.' });
   if (s.pump.on) notes.push({ alert: true, html: "<b>Water pumps need a big kick to start.</b> For a second they can draw 2 to 3 times their running power, so check the power station's surge (peak) rating and test it before winter. Like boilers, most pumps are wired in, so an electrician needs to fit a plug first. If you have a UV filter, it needs power too, or the water isn't being treated." });
+  if (r.compW) notes.push({ html: "<b>Fridges kick when they start.</b> For about a second the compressor can draw several times its running power. We allow about " + nf.format(Math.round(r.startW / 10) * 10) + " W for your " + r.compName + " starting while everything else is on, and only match power stations whose surge (peak) rating covers it. Older fridges can kick harder, so test yours on the power station before winter." });
   if (s.heater.on) notes.push({ html: "<b>Heaters empty a battery fast.</b> A 1 kWh power station runs a 1,000 W heater for under an hour. An electric blanket or heated throw uses about 60 W, so keeping yourself warm goes much further than heating the room." });
   if (s.aquarium.on) notes.push({ html: "<b>Fish tank tips.</b> The heater uses most of the power. Wrap the tank in a blanket or polystyrene to hold the heat in, keep the filter running if you can, and feed less. A battery air pump is a cheap backup." });
   if (s.starlink.on) notes.push({ html: "<b>Starlink works in a power cut if you power it,</b> because it doesn't rely on street cabinets. Turning it off overnight saves about a third, and a Starlink Mini uses less than half the power of the standard dish." });
