@@ -1,6 +1,13 @@
 {
-  "updated": "2026-11-19",
+  "updated": "2026-11-23",
   "items": [
+    {
+      "date": "2026-11-21",
+      "title": "Cable fault cuts power to Stanmore streets for most of Saturday",
+      "summary": "UK Power Networks said an underground cable fault cut supplies to homes around York Avenue and Weston Drive in Stanmore, Harrow, from just after 4am on 21 November. Thick concrete slowed the repair and pushed the expected fix back to early evening; anyone worried about a vulnerable neighbour can call the network on 0800 316 3105.",
+      "source": "Harrow Online",
+      "url": "https://harrowonline.org/2026/11/21/stanmore-power-cut-leaves-homes-without-electricity-for-over-11-hours/"
+    },
     {
       "date": "2026-11-17",
       "title": "National Grid says a viral 19 November blackout warning is fake",
@@ -35,13 +42,6 @@
       "summary": "The grid operator NESO warned supplies would be tight on Monday 9 November as weak winds cut generation, then cancelled the notice. It is the seventh such warning this year, against one in 2025.",
       "source": "Bloomberg",
       "url": "https://www.bloomberg.com/news/articles/2026-11-08/low-wind-triggers-uk-power-grid-margin-warning-for-monday"
-    },
-    {
-      "date": "2026-10-25",
-      "title": "Storm Boelo leaves 90,000 homes without power",
-      "summary": "Around 160,000 homes lost power at the peak and two men were killed by falling trees. About 90,000 were still off supply that evening.",
-      "source": "LBC",
-      "url": "https://www.lbc.co.uk/article/two-killed-falling-tress-strong-winds-batter-uk-storm-boelo-5HjdkRM_2"
     }
   ]
 }
