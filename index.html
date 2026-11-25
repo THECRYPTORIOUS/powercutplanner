@@ -15,16 +15,13 @@
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<meta name="theme-color" content="#0D1820">
+<meta name="theme-color" content="#0F1A44">
 <meta property="og:image" content="https://powercutplanner.co.uk/assets/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Be ready for 72 hours without power: how big a power station do you need?">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://powercutplanner.co.uk/assets/og.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/site.css?v=4d92df2b">
 <style>
 /* Layout: mobile = readout, picker, matches stacked; desktop = picker left, sticky readout + matches right. */
@@ -511,9 +508,10 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
 }
 </style>
 <style>footer.wrap nav { display:flex; flex-wrap:wrap; gap:14px; margin-bottom:12px; }</style>
+<link rel="stylesheet" href="assets/toon.css?v=77aec1be">
 </head>
 <body>
-<header class="site-head"><div class="wrap"><a class="logo" href=""><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/></svg>Power Cut Planner</a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="plug-in-solar/">Solar</a><a href="power-stations/">Compare</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
+<header class="site-head"><div class="wrap"><a class="logo" href=""><img src="assets/mascot/logo.svg" alt="Power Cut Planner" width="164" height="46"></a><nav class="site-nav" aria-label="Main"><a href="" aria-current="page">Calculator</a><a href="plug-in-solar/">Solar</a><a href="power-stations/">Compare</a><a href="guides/">Guides</a><a href="about/">About</a></nav></div></header>
 <div class="live-ticker" id="live-ticker" hidden>
   <div class="wrap lt-inner">
     <a class="lt-label" href="#live"><span class="lt-dot" aria-hidden="true"></span>Live</a>
@@ -526,6 +524,8 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   <canvas class="skyline" id="skyline" aria-hidden="true"></canvas>
   <div class="wrap hero">
     <div class="hero-copy">
+      <img class="hero-bulb" src="assets/mascot/mascot-hero.svg" alt="Flicky the lightbulb waving" width="190" height="241">
+      <p class="hero-say" aria-hidden="true">I'm Flicky! Let's get you ready.</p>
       <p class="alert-tag"><span class="pulse" aria-hidden="true"></span>Government advice</p>
       <p class="kicker">Be ready for</p>
       <div class="big72" aria-label="72 hours"><b id="h72">72</b><span>hours</span></div>
@@ -586,6 +586,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   <section class="readout">
     <div class="side-sticky">
       <div class="meter" id="meter">
+        <img class="meter-bulb" id="meter-bulb" src="assets/mascot/mascot-point.svg" alt="" width="92" height="117">
         <div class="label" id="m-label">Battery you need for 3 days</div>
         <div class="big" id="m-big">5.3<small>kWh</small></div>
         <p class="explain" id="m-explain" aria-live="polite">Your selection uses about 1.1 kWh a day. We add about 0.36 kWh a day for the power station's own sockets, plus 15% for conversion losses.</p>
@@ -754,6 +755,7 @@ footer p { max-width: 75ch; margin: 0 0 8px; }
   <p><a class="cta" href="guides/why-the-government-says-prepare-for-power-cuts/">Read what the government says to keep at home →</a></p>
 </section>
 
+<div class="toon-foot"><div class="wrap"><img src="assets/mascot/mascot-wave.svg" alt="" width="110" height="140" loading="lazy"><p>Flicky says: stay switched on.<small>Watch Flicky's power cut cartoons on <a href="https://www.tiktok.com/@powercutplanner" rel="me noopener" target="_blank">TikTok @powercutplanner</a>.</small></p></div></div>
 <footer class="wrap">
   <nav aria-label="Footer"><a href="about/">About</a><a href="affiliate-disclosure/">Affiliate disclosure</a><a href="privacy/">Privacy</a><a href="mailto:hello.powercutplanner@outlook.com">Contact</a><a href="https://www.tiktok.com/@powercutplanner" rel="me noopener" target="_blank">TikTok</a></nav>
 
@@ -1867,6 +1869,7 @@ function start(saved) {
 window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
 </script>
 <script src="assets/live.js?v=43b6b9bc" defer></script>
+<script src="assets/toon.js?v=77aec1be" defer></script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8ab4fe1ac2bb4e9dbfe66a6a02d38278"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
