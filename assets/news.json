@@ -1,6 +1,20 @@
 {
-  "updated": "2026-11-23",
+  "updated": "2026-11-26",
   "items": [
+    {
+      "date": "2026-11-24",
+      "title": "Grid operator warns of tight electricity supplies during cold snap",
+      "summary": "NESO issued an electricity margin notice for Tuesday 24 November, later narrowed to 3pm to 8pm, as cold weather pushed up demand and grid bottlenecks held back power from Scotland. It is the eighth such notice this year, and NESO said it does not mean blackouts are imminent.",
+      "source": "The Telegraph via Yahoo",
+      "url": "https://www.yahoo.com/news/weather-news/articles/grid-operator-issues-seven-hour-135730400.html"
+    },
+    {
+      "date": "2026-11-24",
+      "title": "MP criticises Electricity North West over repeated Cleveleys power cuts",
+      "summary": "An underground cable fault cut power to 278 properties around Victoria and Norcross in Cleveleys on 24 November, the latest in a run of outages there. Local MP Lorraine Beavers called the repeated cuts unacceptable and is pressing the network for answers on compensation and how long the works will last.",
+      "source": "Blackpool Gazette",
+      "url": "https://www.blackpoolgazette.co.uk/news/blackpool-north-fleetwood-mp-lorraine-beavers-electricity-north-west-cleveleys-power-cuts-9371343"
+    },
     {
       "date": "2026-11-21",
       "title": "Cable fault cuts power to Stanmore streets for most of Saturday",
@@ -28,20 +42,6 @@
       "summary": "The National Resilience Committee says limited stockpiles leave Britain exposed to cyberattacks and extreme weather, and warned a cyberattack could quickly turn into a power cut. It wants a Cabinet minister just for resilience and welcomed the Be Ready campaign.",
       "source": "ITV News",
       "url": "https://www.itv.com/news/2026-11-16/uk-seriously-underprepared-for-emergencies-and-threats-peers-warn"
-    },
-    {
-      "date": "2026-11-10",
-      "title": "BBC reveals its emergency radio plan for a national blackout",
-      "summary": "The BBC has a 'Black Sky' plan to keep broadcasting on FM radio for at least 72 hours if the power fails nationwide. The government says there is no specific threat to the grid.",
-      "source": "ADS Advance",
-      "url": "https://www.adsadvance.co.uk/bbc-black-sky-emergency-plans/"
-    },
-    {
-      "date": "2026-11-08",
-      "title": "Low wind triggers a grid warning for tight supplies",
-      "summary": "The grid operator NESO warned supplies would be tight on Monday 9 November as weak winds cut generation, then cancelled the notice. It is the seventh such warning this year, against one in 2025.",
-      "source": "Bloomberg",
-      "url": "https://www.bloomberg.com/news/articles/2026-11-08/low-wind-triggers-uk-power-grid-margin-warning-for-monday"
     }
   ]
 }
